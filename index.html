@@ -5,15 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kitty Claw Machine</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        canvas {
+            border: 1px solid black;
+            margin-top: 20px;
+        }
+        .scoreboard {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <h1>Kitty Claw Machine</h1>
-    <button id="connectWalletBtn">Connect Wallet</button>
-    <button id="claimRewardsBtn" style="display:none;">Claim Rewards</button>
+    <div class="controls">
+        <button id="connectWalletBtn">Connect Wallet</button>
+        <button id="claimRewardsBtn" style="display:none;">Claim Rewards</button>
+    </div>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
     <div class="scoreboard">
-        <span>Score: <span id="score">0</span></span>
-        <span>Time Left: <span id="timeLeft">60</span>s</span>
+        <span id="score">Score: 0</span>
+        <span id="timer">Time Left: 60s</span>
     </div>
     <script src="app.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js"></script>
