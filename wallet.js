@@ -1,40 +1,38 @@
-import Web3 from 'web3';
-
-// Cüzdan bağlama butonunu yönetme
+// Manage the wallet connection button
 const connectWalletBtn = document.getElementById('connectWalletBtn');
 const claimRewardsBtn = document.getElementById('claimRewardsBtn');
 
 let userAccount;
 let web3;
 
-// Cüzdanı bağlama fonksiyonu
+// Wallet connection function
 async function connectWallet() {
     if (typeof window.ethereum !== 'undefined') {
-        web3 = new Web3(window.ethereum); // Web3.js ile ethereum objesini kullan
+        web3 = new Web3(window.ethereum); // Use Web3.js with the ethereum object
         try {
-            // Kullanıcıdan cüzdan bağlantı isteği
+            // Request account access from the user
             const accounts = await web3.eth.requestAccounts();
             userAccount = accounts[0];
-            connectWalletBtn.style.display = 'none'; // Bağlandıktan sonra butonu gizle
-            claimRewardsBtn.style.display = 'block'; // Ödül talep et butonunu göster
-            console.log("Bağlı hesap:", userAccount);
+            connectWalletBtn.style.display = 'none'; // Hide button after connecting
+            claimRewardsBtn.style.display = 'block'; // Show claim rewards button
+            console.log("Connected account:", userAccount);
         } catch (error) {
-            console.error("Cüzdan bağlama hatası:", error);
-            alert("Cüzdan bağlantısı başarısız oldu. Lütfen tekrar deneyin.");
+            console.error("Wallet connection error:", error);
+            alert("Wallet connection failed. Please try again.");
         }
     } else {
-        alert("MetaMask'ı yükleyin."); // MetaMask'ın yüklü olup olmadığını kontrol et
+        alert("Please install MetaMask.");
     }
 }
 
-// Cüzdan bağlama butonuna tıklama olayı
+// Click event for the wallet connection button
 connectWalletBtn.addEventListener('click', connectWallet);
 
-// Ödül talep etme işlemi
+// Reward claiming function
 claimRewardsBtn.addEventListener("click", function() {
     if (!userAccount) {
-        alert("Lütfen önce cüzdanınızı bağlayın.");
+        alert("Please connect your wallet first.");
     } else {
-        alert("Ödüller başarıyla talep edildi!"); // Burayı daha fazla işlevsellik ile güncelleyebilirsin
+        alert("Rewards claimed successfully!"); // Update this with more functionality as needed
     }
 });

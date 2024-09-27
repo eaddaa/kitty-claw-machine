@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kedi Tıklama Oyunu</title>
-    <link rel="stylesheet" href="style.css"> <!-- Stil dosyasını ekle -->
+    <title>Cat Click Game</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to CSS file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js"></script> <!-- Web3.js library -->
 </head>
 <body>
-    <h1>Kedi Tıklama Oyunu</h1>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <div id="score">Skor: 0</div>
-    <div id="timer">Kalan Süre: 60s</div>
+    <h1>Cat Click Game</h1>
+    <canvas id="gameCanvas" width="600" height="400"></canvas> <!-- Smaller canvas size -->
+    <div id="score">Score: 0</div>
+    <div id="timer">Time Left: 60s</div>
     
-    <button id="connectWalletBtn">Cüzdan Bağla</button>
-    <button id="claimRewardsBtn" style="display:none;">Ödül Talep Et</button>
+    <button id="connectWalletBtn">Connect Wallet</button>
+    <button id="claimRewardsBtn" style="display:none;">Claim Rewards</button>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js"></script>
-    <script src="game.js"></script> <!-- Oyun script dosyası -->
-    <script src="wallet.js"></script> <!-- Cüzdan script dosyası -->
+    <script src="game.js"></script> <!-- Link to game script -->
+    <script src="wallet.js"></script> <!-- Link to wallet script -->
 </body>
-</htm
+</html>
