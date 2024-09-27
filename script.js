@@ -92,3 +92,4 @@ claimRewardsBtn.addEventListener("click", function() {
 connectWalletBtn.addEventListener("click", connectWallet);
 
 
+
