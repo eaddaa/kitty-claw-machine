@@ -63,8 +63,9 @@ let userAccount;
 
 // Cüzdanı bağlama fonksiyonu
 async function connectWallet() {
-    if (window.ethereum) {
+    if (typeof window.ethereum !== 'undefined') {
         try {
+            // Kullanıcıdan cüzdan bağlantı isteği
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             userAccount = accounts[0];
             connectWalletBtn.style.display = 'none'; // Bağlandıktan sonra butonu gizle
@@ -72,6 +73,7 @@ async function connectWallet() {
             console.log("Connected account:", userAccount);
         } catch (error) {
             console.error("Error connecting wallet:", error);
+            alert("Wallet connection failed. Please try again.");
         }
     } else {
         alert("Please install MetaMask!");
@@ -90,6 +92,20 @@ claimRewardsBtn.addEventListener("click", function() {
 
 // Cüzdan bağlama butonuna tıklama olayı
 connectWalletBtn.addEventListener("click", connectWallet);
+
+// Cüzdan bağlantısını kontrol etme
+window.addEventListener('load', () => {
+    if (window.ethereum) {
+        window.ethereum.on('accountsChanged', (accounts) => {
+            if (accounts.length === 0) {
+                alert("Please connect your wallet.");
+            } else {
+                userAccount = accounts[0];
+                console.log("Connected account:", userAccount);
+            }
+        });
+    }
+});
 
 
 
