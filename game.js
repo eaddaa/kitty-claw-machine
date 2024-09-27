@@ -1,55 +1,56 @@
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
 let score = 0;
 let timeLeft = 60;
-let gameInterval;
-let kittyInterval;
 
-// Function to start the game
-function startGame() {
-  score = 0;
-  timeLeft = 60;
-  document.getElementById('score').textContent = score;
-  document.getElementById('timer').textContent = timeLeft;
+// Kedi resmini yükleme
+const catImage = new Image();
+catImage.src = './cat.png'; // Kedi resminin yolu
 
-  // Spawn cats every second
-  kittyInterval = setInterval(spawnKitty, 1000);
+// Kedi başlangıç konumu ve boyutları
+let catX = Math.random() * (canvas.width - 50);
+let catY = Math.random() * (canvas.height - 50);
+const catWidth = 50;
+const catHeight = 50;
 
-  // Start countdown timer
-  gameInterval = setInterval(() => {
-    timeLeft--;
-    document.getElementById('timer').textContent = timeLeft;
+// Zamanlayıcı başlasın
+startTimer();
 
-    if (timeLeft <= 0) {
-      clearInterval(gameInterval);
-      clearInterval(kittyInterval);
-      alert(`Game Over! Your score: ${score}`);
-      // Optionally: send score to the backend to record the score
-    }
-  }, 1000);
+// Kedi resmi yüklendiğinde çizim yap
+catImage.onload = function() {
+    draw();
+};
+
+// Çizim fonksiyonu
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Canvas'ı temizle
+    ctx.drawImage(catImage, catX, catY, catWidth, catHeight); // Kediyi çiz
 }
 
-// Function to spawn a kitty at a random position
-function spawnKitty() {
-  const kitty = document.createElement('div');
-  kitty.classList.add('kitty');
+// Kediye tıklanınca skoru artır ve kedi yerini değiştir
+canvas.addEventListener('click', function(event) {
+    if (event.offsetX > catX && event.offsetX < catX + catWidth &&
+        event.offsetY > catY && event.offsetY < catY + catHeight) {
+        score += 10; // Skoru 10 artır
+        document.getElementById('score').textContent = `Skor: ${score}`;
 
-  // Random position for the kitty
-  const x = Math.random() * (350 - 50) + 50;
-  const y = Math.random() * (350 - 50) + 50;
-  kitty.style.left = `${x}px`;
-  kitty.style.top = `${y}px`;
+        // Kediyi yeni rastgele bir yere taşı
+        catX = Math.random() * (canvas.width - catWidth);
+        catY = Math.random() * (canvas.height - catHeight);
+        draw();
+    }
+});
 
-  // When kitty is clicked, increase score and remove the kitty
-  kitty.onclick = function () {
-    score++;
-    document.getElementById('score').textContent = score;
-    kitty.remove(); // Remove kitty after it's clicked
-  };
+// Zamanlayıcı fonksiyonu
+function startTimer() {
+    const timerInterval = setInterval(function() {
+        timeLeft -= 1;
+        document.getElementById('timer').textContent = `Kalan Süre: ${timeLeft}s`;
 
-  // Add the kitty to the game container
-  document.getElementById('gameContainer').appendChild(kitty);
-
-  // Remove the kitty after 2 seconds if not clicked
-  setTimeout(() => {
-    kitty.remove();
-  }, 2000);
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            alert(`Süre doldu! Son skorun: ${score}`);
+        }
+    }, 1000); // Her saniyede bir geri sayım
 }

@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kedi Oyunu</title>
-    <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.umd.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <title>Kedi Tıklama Oyunu</title>
+    <link rel="stylesheet" href="style.css"> <!-- Stil dosyasını ekle -->
 </head>
 <body>
-    <div>
-        <button id="connectWalletBtn">Cüzdan Bağla</button>
-        <button id="claimRewardsBtn" style="display: none;">Ödülleri Talep Et</button>
-        <p id="score">Skor: 0</p>
-        <p id="timer">Kalan Süre: 60s</p>
-    </div>
+    <h1>Kedi Tıklama Oyunu</h1>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
-    <script src="app.js"></script>
+    <div id="score">Skor: 0</div>
+    <div id="timer">Kalan Süre: 60s</div>
+    
+    <button id="connectWalletBtn">Cüzdan Bağla</button>
+    <button id="claimRewardsBtn" style="display:none;">Ödül Talep Et</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js"></script>
+    <script src="game.js"></script> <!-- Oyun script dosyası -->
+    <script src="wallet.js"></script> <!-- Cüzdan script dosyası -->
 </body>
-</html>
+</htm
