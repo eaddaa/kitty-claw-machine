@@ -1,56 +1,97 @@
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 
 let score = 0;
 let timeLeft = 60;
+let fallingCats = [];
 
-// Kedi resmini yükleme
-const catImage = new Image();
-catImage.src = './cat.png'; // Kedi resminin yolunu kontrol et (bu resim 'cat.png' olacak)
-
-// Kedi başlangıç konumu ve boyutları
-let catX = Math.random() * (canvas.width - 50);
-let catY = Math.random() * (canvas.height - 50);
-const catWidth = 50;
-const catHeight = 50;
-
-// Zamanlayıcı başlasın
-startTimer();
-
-// Kedi resmi yüklendiğinde çizim yap
-catImage.onload = function() {
-    draw();
-};
-
-// Çizim fonksiyonu
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Canvas'ı temizle
-    ctx.drawImage(catImage, catX, catY, catWidth, catHeight); // Kediyi çiz
-}
-
-// Kediye tıklanınca skoru artır ve kedi yerini değiştir
-canvas.addEventListener('click', function(event) {
-    if (event.offsetX > catX && event.offsetX < catX + catWidth &&
-        event.offsetY > catY && event.offsetY < catY + catHeight) {
-        score += 10; // Skoru 10 artır
-        document.getElementById('score').textContent = `Score: ${score}`;
-
-        // Kediyi yeni rastgele bir yere taşı
-        catX = Math.random() * (canvas.width - catWidth);
-        catY = Math.random() * (canvas.height - catHeight);
-        draw();
+// Cat object class
+class Cat {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.speed = Math.random() * 2 + 1; // Random falling speed
+        this.image = new Image();
+        this.image.src = "assets/cat.png"; // Image path
     }
-});
 
-// Zamanlayıcı fonksiyonu
-function startTimer() {
-    const timerInterval = setInterval(function() {
-        timeLeft -= 1;
-        document.getElementById('timer').textContent = `Time Left: ${timeLeft}s`;
+    // Draw the cat on the canvas
+    draw() {
+        ctx.drawImage(this.image, this.x, this.y, 50, 50);
+    }
 
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            alert(`Time's up! Your final score is: ${score}`);
-        }
-    }, 1000); // Her saniyede bir geri sayım
+    // Make the cat fall
+    fall() {
+        this.y += this.speed;
+    }
 }
+
+// Generate random cats at the top of the canvas
+function generateCats() {
+    const x = Math.random() * canvas.width;
+    const newCat = new Cat(x, 0); // Start at the top (y = 0)
+    fallingCats.push(newCat);
+}
+
+// Catch a cat and update the score
+function catchCat(catIndex) {
+    score += 100; // Increase score
+    fallingCats.splice(catIndex, 1); // Remove the caught cat
+}
+
+// Update the game by redrawing the canvas and moving the cats
+function updateGame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+    fallingCats.forEach((cat, index) => {
+        cat.fall();
+        cat.draw();
+        
+        // End game if a cat falls off the screen
+        if (cat.y > canvas.height) {
+            alert("Game Over! Your Score: " + score);
+            resetGame();
+        }
+    });
+
+    // Update score and time display
+    document.getElementById('score').textContent = score;
+    document.getElementById('timeLeft').textContent = timeLeft;
+}
+
+// Reset the game when time runs out or when a cat reaches the bottom
+function resetGame() {
+    score = 0;
+    timeLeft = 60;
+    fallingCats = [];
+}
+
+// Timer function
+setInterval(function() {
+    timeLeft--;
+    if (timeLeft <= 0) {
+        alert("Time's Up! Your Score: " + score);
+        resetGame();
+    }
+}, 1000);
+
+// Generate a new cat every second
+setInterval(generateCats, 1000);
+
+// Start the game loop to update the canvas
+function gameLoop() {
+    updateGame();
+    requestAnimationFrame(gameLoop);
+}
+gameLoop();
+
+// Detect mouse click to catch cats
+canvas.addEventListener("click", function(event) {
+    const mouseX = event.offsetX;
+    const mouseY = event.offsetY;
+
+    fallingCats.forEach((cat, index) => {
+        if (mouseX >= cat.x && mouseX <= cat.x + 50 && mouseY >= cat.y && mouseY <= cat.y + 50) {
+            catchCat(index); // Catch the cat
+        }
+    });
+});
