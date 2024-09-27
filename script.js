@@ -66,7 +66,7 @@ async function connectWallet() {
     if (typeof window.ethereum !== 'undefined') {
         try {
             // Kullanıcıdan cüzdan bağlantı isteği
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
             userAccount = accounts[0];
             connectWalletBtn.style.display = 'none'; // Bağlandıktan sonra butonu gizle
             claimRewardsBtn.style.display = 'block'; // Ödül talep et butonunu göster
