@@ -54,3 +54,4 @@ function startTimer() {
         }
     }, 1000); // Her saniyede bir geri sayım
 }
+
