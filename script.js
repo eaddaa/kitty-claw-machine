@@ -4,6 +4,8 @@ const ctx = canvas.getContext("2d");
 let score = 0;
 let timeLeft = 60;
 let fallingCats = [];
+let gameInterval;
+let timerInterval;
 
 // Cat object class
 class Cat {
@@ -28,7 +30,7 @@ class Cat {
 
 // Generate random cats at the top of the canvas
 function generateCats() {
-    const x = Math.random() * canvas.width;
+    const x = Math.random() * (canvas.width - 50); // Ensure cats stay within canvas
     const newCat = new Cat(x, 0); // Start at the top (y = 0)
     fallingCats.push(newCat);
 }
@@ -60,29 +62,40 @@ function updateGame() {
 
 // Reset the game when time runs out or when a cat reaches the bottom
 function resetGame() {
+    clearInterval(gameInterval);
+    clearInterval(timerInterval);
     score = 0;
     timeLeft = 60;
     fallingCats = [];
+    document.getElementById('score').textContent = score;
+    document.getElementById('timeLeft').textContent = timeLeft;
 }
 
 // Timer function
-setInterval(function() {
-    timeLeft--;
-    if (timeLeft <= 0) {
-        alert("Time's Up! Your Score: " + score);
-        resetGame();
-    }
-}, 1000);
+function startTimer() {
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            alert("Time's Up! Your Score: " + score);
+            resetGame();
+        }
+        document.getElementById('timeLeft').textContent = timeLeft;
+    }, 1000);
+}
 
-// Generate a new cat every second
-setInterval(generateCats, 1000);
+// Start the game and timer
+function startGame() {
+    gameInterval = setInterval(generateCats, 1000); // Generate a new cat every second
+    startTimer(); // Start the timer
+    gameLoop(); // Start the game loop
+}
 
 // Start the game loop to update the canvas
 function gameLoop() {
     updateGame();
     requestAnimationFrame(gameLoop);
 }
-gameLoop();
 
 // Detect mouse click to catch cats
 canvas.addEventListener("click", function(event) {
@@ -95,3 +108,6 @@ canvas.addEventListener("click", function(event) {
         }
     });
 });
+
+// Start the game
+startGame();
