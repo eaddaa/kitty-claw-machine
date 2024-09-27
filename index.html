@@ -8,12 +8,14 @@
 </head>
 <body>
     <h1>Kitty Claw Machine</h1>
+    <button id="connectWalletBtn">Connect Wallet</button>
+    <button id="claimRewardsBtn" style="display:none;">Claim Rewards</button>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <div class="info">
-        <p id="score">Score: 0</p>
-        <p id="timer">Time Left: 60s</p>
+    <div class="scoreboard">
+        <span>Score: <span id="score">0</span></span>
+        <span>Time Left: <span id="timeLeft">60</span>s</span>
     </div>
-
-    <script src="script.js"></script>
+    <script src="app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js"></script>
 </body>
 </html>
