@@ -6,7 +6,7 @@ let timeLeft = 60;
 
 // Kedi resmini yükleme
 const catImage = new Image();
-catImage.src = './cat.png'; // Kedi resminin yolunu kontrol et
+catImage.src = './cat.png'; // Kedi resminin yolunu kontrol et (bu resim 'cat.png' olacak)
 
 // Kedi başlangıç konumu ve boyutları
 let catX = Math.random() * (canvas.width - 50);
@@ -33,7 +33,7 @@ canvas.addEventListener('click', function(event) {
     if (event.offsetX > catX && event.offsetX < catX + catWidth &&
         event.offsetY > catY && event.offsetY < catY + catHeight) {
         score += 10; // Skoru 10 artır
-        document.getElementById('score').textContent = `Skor: ${score}`;
+        document.getElementById('score').textContent = Score: ${score};
 
         // Kediyi yeni rastgele bir yere taşı
         catX = Math.random() * (canvas.width - catWidth);
@@ -46,11 +46,11 @@ canvas.addEventListener('click', function(event) {
 function startTimer() {
     const timerInterval = setInterval(function() {
         timeLeft -= 1;
-        document.getElementById('timer').textContent = `Kalan Süre: ${timeLeft}s`;
+        document.getElementById('timer').textContent = Time Left: ${timeLeft}s;
 
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
-            alert(`Süre doldu! Son skorun: ${score}`);
+            alert(Time's up! Your final score is: ${score});
         }
     }, 1000); // Her saniyede bir geri sayım
 }
@@ -63,20 +63,15 @@ let userAccount;
 
 // Cüzdanı bağlama fonksiyonu
 async function connectWallet() {
-    if (typeof window.ethereum !== 'undefined') {
-        try {
-            // Kullanıcıdan cüzdan bağlantı isteği
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            userAccount = accounts[0];
-            connectWalletBtn.style.display = 'none'; // Bağlandıktan sonra butonu gizle
-            claimRewardsBtn.style.display = 'block'; // Ödül talep et butonunu göster
-            console.log("Bağlı hesap:", userAccount);
-        } catch (error) {
-            console.error("Cüzdan bağlama hatası:", error);
-            alert("Cüzdan bağlantısı başarısız oldu. Lütfen tekrar deneyin.");
-        }
-    } else {
-        alert("Lütfen MetaMask'ı yükleyin!");
+    try {
+        // Kullanıcıdan cüzdan bağlantı isteği
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        userAccount = accounts[0];
+        connectWalletBtn.style.display = 'none'; // Bağlandıktan sonra butonu gizle
+        claimRewardsBtn.style.display = 'block'; // Ödül talep et butonunu göster
+        console.log("Bağlı hesap:", userAccount);
+    } catch (error) {
+        console.error("Cüzdan bağlama hatası:", error);
     }
 }
 
@@ -91,6 +86,3 @@ claimRewardsBtn.addEventListener("click", function() {
         alert("Ödüller başarıyla talep edildi!"); // Burayı daha fazla işlevsellik ile güncelleyebilirsin
     }
 });
-
-
-
