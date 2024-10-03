@@ -1,4 +1,4 @@
-// HTML Elemanlarını Seçme
+// HTML Elements
 const connectWalletBtn = document.getElementById('connectWalletBtn');
 const claimRewardsBtn = document.getElementById('claimRewardsBtn');
 const welcomeMessage = document.getElementById('welcomeMessage');
@@ -12,73 +12,102 @@ let web3;
 let score = 0;
 let timeLeft = 60;
 let gameInterval;
+let kittenInterval;
 
-// Cüzdan Bağlantı Fonksiyonu
+// Wallet connection function
 async function connectWallet() {
     if (typeof window.ethereum !== 'undefined') {
-        web3 = new Web3(window.ethereum); // Web3.js ile ethereum nesnesini kullan
+        web3 = new Web3(window.ethereum); // Use Web3.js with the ethereum object
         try {
-            // Kullanıcıdan hesap erişimi talep et
+            // Request account access from the user
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             userAccount = accounts[0];
-            console.log("Bağlı hesap:", userAccount);
-            welcomeMessage.style.display = 'none'; // Bağlandıktan sonra hoş geldin mesajını gizle
-            gameContainer.style.display = 'block'; // Oyun kutusunu göster
-            startGame(); // Oyunu başlat
+            console.log("Connected account:", userAccount);
+            welcomeMessage.style.display = 'none'; // Hide welcome message after connecting
+            gameContainer.style.display = 'block'; // Show the game box
+            startGame(); // Start the game
         } catch (error) {
-            console.error("Cüzdan bağlantı hatası:", error);
-            alert("Cüzdan bağlantısı başarısız oldu. Lütfen tekrar deneyin.");
+            console.error("Wallet connection error:", error);
+            alert("Wallet connection failed. Please try again.");
         }
     } else {
-        alert("Lütfen MetaMask'ı kurun.");
+        alert("Please install MetaMask.");
     }
 }
 
-// Bağlantı butonuna tıklama olayı
+// Click event for the wallet connection button
 connectWalletBtn.addEventListener('click', connectWallet);
 
-// Oyun Başlatma Fonksiyonu
+// Game start function
 function startGame() {
-    score = 0; // Skoru sıfırla
-    timeLeft = 60; // Kalan süreyi sıfırla
-    scoreboard.textContent = `Score: ${score}`; // Skoru göster
-    updateTimer(); // Zamanlayıcıyı başlat
-    gameInterval = setInterval(updateGame, 1000); // Her saniyede updateGame'i çağır
+    score = 0; // Reset score
+    timeLeft = 60; // Reset time
+    scoreboard.textContent = `Score: ${score}`; // Show score
+    updateTimer(); // Start timer
+    kittenInterval = setInterval(moveKittens, 1000); // Move kittens every second
+    gameInterval = setInterval(updateGame, 1000); // Call updateGame every second
 }
 
-// Oyun durumunu güncelle
+// Function to move kittens
+function moveKittens() {
+    const kitten = document.createElement('div');
+    kitten.classList.add('kitten');
+    const randomX = Math.random() * (gameCanvas.width - 50); // 50 is kitten width
+    const randomY = Math.random() * (gameCanvas.height - 50); // 50 is kitten height
+    kitten.style.left = `${randomX}px`;
+    kitten.style.top = `${randomY}px`;
+    gameCanvas.appendChild(kitten);
+
+    // Add click event for the kitten
+    kitten.addEventListener('click', function() {
+        score++;
+        scoreboard.textContent = `Score: ${score}`;
+        gameCanvas.removeChild(kitten); // Remove the kitten after clicking
+    });
+
+    // Remove kitten after 5 seconds if not clicked
+    setTimeout(() => {
+        if (gameCanvas.contains(kitten)) {
+            gameCanvas.removeChild(kitten);
+        }
+    }, 5000);
+}
+
+// Update game state
 function updateGame() {
     if (timeLeft > 0) {
         timeLeft--;
-        updateTimer(); // Zamanlayıcıyı güncelle
+        updateTimer(); // Update timer
     } else {
         clearInterval(gameInterval);
-        alert("Oyun bitti! Skorunuz: " + score);
+        clearInterval(kittenInterval);
+        alert("Game over! Your score: " + score);
         resetGame();
     }
 }
 
-// Zamanlayıcıyı güncelle
+// Update timer
 function updateTimer() {
     timeLeftDisplay.textContent = `Time Left: ${timeLeft}s`;
 }
 
-// Oyun Sıfırlama Fonksiyonu
+// Reset game function
 function resetGame() {
     score = 0;
     timeLeft = 60;
     scoreboard.textContent = `Score: ${score}`;
     updateTimer();
-    welcomeMessage.style.display = 'block'; // Hoş geldin mesajını tekrar göster
-    gameContainer.style.display = 'none'; // Oyun alanını gizle
+    welcomeMessage.style.display = 'block'; // Show welcome message again
+    gameContainer.style.display = 'none'; // Hide game area
 }
 
-// Ödül talep etme fonksiyonu
+// Reward claiming function
 claimRewardsBtn.addEventListener("click", function() {
     if (!userAccount) {
-        alert("Lütfen önce cüzdanınızı bağlayın.");
+        alert("Please connect your wallet first.");
     } else {
-        alert("Ödüller başarıyla talep edildi!"); // Ödül talep etme işlevselliği için yer tutucu
+        alert("Rewards claimed successfully!"); // Placeholder for claiming rewards functionality
     }
 });
+
 

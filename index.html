@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,9 +34,18 @@
             margin-top: 20px;
         }
         #gameCanvas {
-            border: 2px solid #000; /* Oyun alanının çerçevesi */
+            border: 2px solid #000; /* Game area border */
             display: block;
-            margin: 0 auto; /* Ortalamak için */
+            margin: 0 auto; /* Centering */
+            position: relative; /* For absolute positioning of kittens */
+            overflow: hidden; /* Prevent kittens from overflowing */
+        }
+        .kitten {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-image: url('kitten.png'); /* Replace with your kitten image URL */
+            background-size: cover;
         }
         #scoreboard, #timeLeft {
             margin: 10px 0;
@@ -53,13 +62,13 @@
     </style>
 </head>
 <body>
-    <div id="welcomeMessage">Hoş geldiniz! Cüzdanınızı bağlayın.</div>
-    <button id="connectWalletBtn">Cüzdanı Bağla</button>
+    <div id="welcomeMessage">Welcome! Please connect your wallet.</div>
+    <button id="connectWalletBtn">Connect Wallet</button>
     <div id="gameContainer">
         <canvas id="gameCanvas" width="400" height="300"></canvas>
         <div id="scoreboard">Score: 0</div>
         <div id="timeLeft">Time Left: 60s</div>
-        <button id="claimRewardsBtn">Ödülleri Talep Et</button>
+        <button id="claimRewardsBtn">Claim Rewards</button>
     </div>
 </body>
 </html>
