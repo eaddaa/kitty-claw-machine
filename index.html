@@ -12,6 +12,7 @@
             flex-direction: column;
             align-items: center;
             font-family: Arial, sans-serif;
+            background-color: #e9ecef; /* Arka plan rengi */
         }
         #welcomeMessage {
             margin: 20px;
@@ -33,19 +34,25 @@
             text-align: center;
             margin-top: 20px;
         }
+        #gameTitle {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
         #gameCanvas {
-            border: 2px solid #000; /* Game area border */
+            border: 2px solid #000; /* Oyun alanı kenarlığı */
             display: block;
-            margin: 0 auto; /* Centering */
-            position: relative; /* For absolute positioning of kittens */
-            overflow: hidden; /* Prevent kittens from overflowing */
-            background-color: #f0f0f0; /* Optional: Background color for game area */
+            margin: 0 auto; /* Ortalamak için */
+            position: relative; /* Kedilerin mutlak konumlandırılması için */
+            overflow: hidden; /* Kedilerin taşmasını önlemek için */
+            background-color: #f0f0f0; /* Oyun alanı arka plan rengi */
+            height: 300px; /* Oyun alanı yüksekliği */
+            width: 400px; /* Oyun alanı genişliği */
         }
         .kitten {
             position: absolute;
             width: 50px;
             height: 50px;
-            background-image: url('kitten.png'); /* Replace with your kitten image URL */
+            background-image: url('kitten.png'); /* Kedinin resmi */
             background-size: cover;
         }
         #scoreboard, #timeLeft {
@@ -66,6 +73,7 @@
     <div id="welcomeMessage">Welcome! Please connect your wallet.</div>
     <button id="connectWalletBtn">Connect Wallet</button>
     <div id="gameContainer">
+        <div id="gameTitle">Catch the Kittens!</div> <!-- Oyun başlığı -->
         <canvas id="gameCanvas" width="400" height="300"></canvas>
         <div id="scoreboard">Score: 0</div>
         <div id="timeLeft">Time Left: 60s</div>
