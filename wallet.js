@@ -2,6 +2,7 @@
 const connectWalletBtn = document.getElementById('connectWalletBtn');
 const claimRewardsBtn = document.getElementById('claimRewardsBtn');
 const welcomeMessage = document.getElementById('welcomeMessage');
+const gameContainer = document.getElementById('gameContainer'); // Assuming you have a game container
 const gameCanvas = document.getElementById('gameCanvas');
 
 let userAccount;
@@ -43,5 +44,13 @@ claimRewardsBtn.addEventListener("click", function() {
 // Start the game after wallet connection
 function startGame() {
     welcomeMessage.style.display = 'none'; // Hide the welcome message
+    gameContainer.style.display = 'block'; // Show the game container
     gameCanvas.style.display = 'block'; // Show the game canvas
+    initializeGame(); // Initialize game state if needed
+}
+
+// Example initialization function for game state (you can expand this)
+function initializeGame() {
+    // Reset scores, timers, and other necessary game variables
+    console.log("Game initialized.");
 }

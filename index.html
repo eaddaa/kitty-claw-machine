@@ -3,21 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ᛕᎥ丅丅Ƴ ᑕᒪᗩᗯ ᗰᗩᑕᕼᎥᑎᗴ</title>
+    <title>🐱 ᛕᎥ丅 丅 Ƴ ᑕᒪᗩᗯ ᗰᗩᑕᕼᎥᑎᗴ 🐱</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js"></script>
     <link rel="stylesheet" href="styles.css"> <!-- Include your CSS file -->
 </head>
 <body>
     <div id="welcomeMessage">
-        <h2>ᛕᎥ丅丅Ƴ ᑕᒪᗩᗯ ᗰᗩᑕᕼᎥᑎᗴ! 🎉</h2>
+        <h2 style="text-align: center;">🐱 ᛕᎥ丅 丅 Ƴ ᑕᒪᗩᗯ ᗰᗩᑕᕼᎥᑎᗴ 🐱</h2>
+        <p style="text-align: center;">Please connect your wallet to start the game.</p>
         <button id="connectWalletBtn">Connect Wallet</button>
         <div id="claimRewardsContainer" style="display: none;">
             <button id="claimRewardsBtn">Claim Rewards</button>
         </div>
     </div>
-    <canvas id="gameCanvas" width="400" height="400" style="display: none;"></canvas>
-    <div id="score">Score: 0</div>
-    <div id="timer">Time Left: 60s</div>
+
+    <div id="gameContainer" style="display: none;">
+        <h2 style="text-align: center;">🐱 ᛕᎥ丅 丅 Ƴ ᑕᒪᗩᗯ ᗰᗩᑕᕼᎥᑎᗴ 🐱</h2>
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <div id="score">Score: 0</div>
+        <div id="timer">Time Left: 60s</div>
+    </div>
+
+    <script src="wallet.js"></script> <!-- Include your wallet logic file -->
     <script src="game.js"></script> <!-- Include your game logic file -->
 </body>
 </html>
