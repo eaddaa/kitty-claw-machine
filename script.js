@@ -107,4 +107,18 @@ claimRewardsBtn.addEventListener("click", function() {
     }
 });
 
+// Listen for account changes
+window.ethereum.on('accountsChanged', (accounts) => {
+    if (accounts.length > 0) {
+        userAccount = accounts[0];
+        console.log("Account changed:", userAccount);
+        scoreboard.textContent = `Score: ${score}`; // Update score display if needed
+    } else {
+        userAccount = null; // User has disconnected
+        alert("Please connect your wallet.");
+        welcomeMessage.style.display = 'block'; // Show welcome message again
+        gameContainer.style.display = 'none'; // Hide game area
+        startGameBtn.style.display = 'none'; // Hide start game button
+    }
+});
 
