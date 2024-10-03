@@ -1,34 +1,29 @@
-// HTML elementlerini seç
 const connectWalletBtn = document.getElementById('connectWalletBtn');
 const claimRewardsBtn = document.getElementById('claimRewardsBtn');
-const message = document.getElementById('message');
+const welcomeMessage = document.getElementById('welcomeMessage');
 const gameCanvas = document.getElementById('gameCanvas');
-const scoreDisplay = document.getElementById('scoreDisplay');
-const timerDisplay = document.getElementById('timerDisplay');
+const scoreboard = document.getElementById('score');
+const gameContainer = document.getElementById('gameContainer');
 
 let userAccount;
 let web3;
 let score = 0;
 let timeLeft = 60;
-let catX, catY, catWidth = 50, catHeight = 50;
-const ctx = gameCanvas.getContext('2d');
+let gameInterval;
 
-// Kedi görseli
-const catImage = new Image();
-catImage.src = './cat.png'; // Kedinin görsel yolunu doğrulayın
-
-// Cüzdan bağlama fonksiyonu
+// Wallet connection function
 async function connectWallet() {
     if (typeof window.ethereum !== 'undefined') {
-        web3 = new Web3(window.ethereum); // Web3.js ile Ethereum
+        web3 = new Web3(window.ethereum); // Use Web3.js with the ethereum object
         try {
+            // Request account access from the user
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             userAccount = accounts[0];
             console.log("Connected account:", userAccount);
-            connectWalletBtn.style.display = 'none'; // Cüzdan bağlandıktan sonra gizle
-            message.style.display = 'none';
-            gameCanvas.style.display = 'block'; // Oyunu göster
-            startGame(); // Oyunu başlat
+            welcomeMessage.style.display = 'none'; // Hide welcome message after connecting
+            gameCanvas.style.display = 'block'; // Show the game canvas
+            gameContainer.style.display = 'block'; // Show the game box
+            startGame(); // Start the game
         } catch (error) {
             console.error("Wallet connection error:", error);
             alert("Wallet connection failed. Please try again.");
@@ -38,58 +33,52 @@ async function connectWallet() {
     }
 }
 
-// Cüzdan butonuna tıklama olayı
+// Click event for the wallet connection button
 connectWalletBtn.addEventListener('click', connectWallet);
 
-// Ödülleri talep etme fonksiyonu
+// Reward claiming function
 claimRewardsBtn.addEventListener("click", function() {
     if (!userAccount) {
         alert("Please connect your wallet first.");
     } else {
-        alert("Rewards claimed successfully!"); // Daha fazla işlevsellik ekleyebilirsiniz
+        alert("Rewards claimed successfully!"); // Placeholder for claiming rewards functionality
     }
 });
 
-// Oyun başlangıç fonksiyonu
+// Start the game after wallet connection
 function startGame() {
-    moveCat(); // Kedi hareket etsin
-    startTimer(); // Zamanlayıcı başlasın
+    // Game initialization logic here (e.g., reset score, set up game canvas)
+    score = 0; // Reset score
+    timeLeft = 60; // Reset time left
+    scoreboard.textContent = `Score: ${score}`; // Display score
+    updateTimer(); // Start the timer
+    gameInterval = setInterval(updateGame, 1000); // Call updateGame every second
 }
 
-// Kediyi yeni bir rastgele konuma taşı
-function moveCat() {
-    catX = Math.random() * (gameCanvas.width - catWidth);
-    catY = Math.random() * (gameCanvas.height - catHeight);
-    drawCat();
-    setTimeout(moveCat, 1000); // Kediyi her 1 saniyede bir hareket ettir
-}
-
-// Kediyi canvas üzerine çiz
-function drawCat() {
-    ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height); // Temizle
-    ctx.drawImage(catImage, catX, catY, catWidth, catHeight); // Yeni kediyi çiz
-}
-
-// Oyuncu kedinin üzerine tıklarsa skoru artır
-gameCanvas.addEventListener('click', function(event) {
-    const clickX = event.offsetX;
-    const clickY = event.offsetY;
-
-    // Eğer tıklama kedinin üzerindeyse
-    if (clickX > catX && clickX < catX + catWidth && clickY > catY && clickY < catY + catHeight) {
-        score += 10; // Skoru artır
-        scoreDisplay.textContent = `Score: ${score}`;
+// Update the game state
+function updateGame() {
+    if (timeLeft > 0) {
+        timeLeft--;
+        updateTimer(); // Update timer display
+    } else {
+        clearInterval(gameInterval);
+        alert("Game over! Your score: " + score);
+        resetGame();
     }
-});
+}
 
-// Zamanlayıcı fonksiyonu
-function startTimer() {
-    const timerInterval = setInterval(function() {
-        timeLeft -= 1;
-        timerDisplay.textContent = `Time Left: ${timeLeft}s`;
+// Update timer display
+function updateTimer() {
+    document.getElementById('timeLeft').textContent = `Time Left: ${timeLeft}s`;
+}
 
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            alert(`Time's up! Your final score is: ${score}`);
-            gameCanvas.style.display = 'none'; // Oyun
-
+// Reset the game
+function resetGame() {
+    score = 0;
+    timeLeft = 60;
+    scoreboard.textContent = `Score: ${score}`;
+    updateTimer();
+    welcomeMessage.style.display = 'block'; // Show the welcome message again
+    gameCanvas.style.display = 'none'; // Hide the game canvas
+    gameContainer.style.display = 'none'; // Hide the game box
+}

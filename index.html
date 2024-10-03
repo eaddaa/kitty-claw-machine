@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kitty Claw Machine 🐱</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js"></script>
-    <link rel="stylesheet" href="styles.css"> <!-- CSS dosyasını bağla -->
+    <title>🐱 KITTY CLAW MACHINE 🐱</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="gameContainer">
-        <h2>🐱 ᛕᎥ丅 丅 Ƴ ᑕᒪᗩᗯ ᗰᗩᑕᕼᎥᑎᗴ 🐱</h2>
-        <p id="message">Please connect your wallet to start the game</p>
+    <div class="game-container">
+        <h1>🐱 ᛕᎥ丅丅Ƴ ᑕᒪᗩᗯ ᗰᗩᑕᕼᎥᑎᗴ 🐱</h1>
+        <p id="welcomeMessage">Please connect your wallet to start the game</p>
         <button id="connectWalletBtn">Connect Wallet</button>
         <canvas id="gameCanvas" width="400" height="400"></canvas>
-        <div id="scoreDisplay">Score: 0</div>
-        <div id="timerDisplay">Time Left: 60s</div>
-        <button id="claimRewardsBtn" style="display:none;">Claim Rewards</button>
+        <p id="score">Score: 0</p>
+        <p id="timeLeft">Time Left: 60s</p>
+        <button id="claimRewardsBtn" style="display: none;">Claim Rewards</button>
     </div>
-    <script src="script.js"></script> <!-- Oyun kodları -->
+
+    <script src="script.js"></script>
 </body>
 </html>

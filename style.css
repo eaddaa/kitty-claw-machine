@@ -1,32 +1,33 @@
-/* Sayfanın ortasında her şeyi hizalar */
-body, html {
-    height: 100%;
-    margin: 0;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
+    height: 100vh;
+    margin: 0;
 }
 
-#gameContainer {
+.container {
     text-align: center;
-    width: 400px; /* Kare alan */
-    background-color: #fff;
+    border: 2px solid #000;
     padding: 20px;
-    border: 2px solid #ccc;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    position: relative;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.game-title {
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
 #gameCanvas {
-    border: 2px solid #333;
-    display: none; /* Oyunun başlamasını bekliyor */
-    margin: 20px 0;
+    width: 400px;  /* Adjust the width of the game area */
+    height: 400px; /* Adjust the height of the game area */
+    border: 2px solid #000;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
-#scoreDisplay, #timerDisplay {
-    margin: 10px;
-    font-size: 1.2em;
-}
-
