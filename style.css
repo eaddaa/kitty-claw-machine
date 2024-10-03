@@ -12,10 +12,21 @@ body {
     text-align: center;
 }
 
+.game-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 3px solid black;
+    padding: 20px;
+    width: 450px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
 #gameCanvas {
-    border: 3px solid #000;
-    display: none; /* Başlangıçta gizli, cüzdan bağlandıktan sonra gösterilecek */
-    margin: 20px auto;
+    border: 2px solid #000;
+    display: none; /* Initially hidden, shown after wallet connection */
 }
 
 #scoreboard {
@@ -23,8 +34,7 @@ body {
     font-size: 18px;
     display: flex;
     justify-content: space-between;
-    width: 400px;
-    margin: 0 auto;
+    width: 100%;
 }
 
 button {
@@ -50,3 +60,4 @@ h2 {
 p {
     font-size: 18px;
 }
+
