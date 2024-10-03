@@ -1,3 +1,5 @@
+// script.js
+
 // HTML Elements
 const connectWalletBtn = document.getElementById('connectWalletBtn');
 const claimRewardsBtn = document.getElementById('claimRewardsBtn');
@@ -13,35 +15,20 @@ startGameBtn.textContent = "Start Game";
 startGameBtn.style.display = "none"; // İlk başta görünmez
 document.body.appendChild(startGameBtn);
 
-let userAccount;
-let web3;
 let score = 0;
 let timeLeft = 60;
 let gameInterval;
 let kittenInterval;
 
-// Wallet connection function
-async function connectWallet() {
-    if (typeof window.ethereum !== 'undefined') {
-        web3 = new Web3(window.ethereum);
-        try {
-            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            userAccount = accounts[0];
-            console.log("Connected account:", userAccount);
-            welcomeMessage.style.display = 'none';
-            gameContainer.style.display = 'block';
-            startGameBtn.style.display = "block"; // Cüzdan bağlandığında butonu göster
-        } catch (error) {
-            console.error("Wallet connection error:", error);
-            alert("Wallet connection failed. Please try again.");
-        }
-    } else {
-        alert("Please install MetaMask.");
-    }
-}
-
 // Click event for the wallet connection button
-connectWalletBtn.addEventListener('click', connectWallet);
+connectWalletBtn.addEventListener('click', async () => {
+    const connected = await connectWallet(); // cüzdanı bağla
+    if (connected) {
+        welcomeMessage.style.display = 'none';
+        gameContainer.style.display = 'block';
+        startGameBtn.style.display = "block"; // Cüzdan bağlandığında butonu göster
+    }
+});
 
 // Oyun başlatma butonuna tıklandığında
 startGameBtn.addEventListener('click', startGame);
@@ -112,10 +99,12 @@ function resetGame() {
 
 // Reward claiming function
 claimRewardsBtn.addEventListener("click", function() {
+    const userAccount = getUserAccount(); // cüzdan bilgisini al
     if (!userAccount) {
         alert("Please connect your wallet first.");
     } else {
         alert("Rewards claimed successfully!"); // Placeholder for claiming rewards functionality
     }
 });
+
 
