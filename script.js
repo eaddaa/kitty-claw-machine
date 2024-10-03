@@ -7,6 +7,12 @@ const scoreboard = document.getElementById('scoreboard');
 const gameContainer = document.getElementById('gameContainer');
 const timeLeftDisplay = document.getElementById('timeLeft');
 
+// Yeni buton
+const startGameBtn = document.createElement('button');
+startGameBtn.textContent = "Start Game";
+startGameBtn.style.display = "none"; // İlk başta görünmez
+document.body.appendChild(startGameBtn);
+
 let userAccount;
 let web3;
 let score = 0;
@@ -17,15 +23,14 @@ let kittenInterval;
 // Wallet connection function
 async function connectWallet() {
     if (typeof window.ethereum !== 'undefined') {
-        web3 = new Web3(window.ethereum); // Use Web3.js with the ethereum object
+        web3 = new Web3(window.ethereum);
         try {
-            // Request account access from the user
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             userAccount = accounts[0];
             console.log("Connected account:", userAccount);
-            welcomeMessage.style.display = 'none'; // Hide welcome message after connecting
-            gameContainer.style.display = 'block'; // Show the game box
-            startGame(); // Start the game
+            welcomeMessage.style.display = 'none';
+            gameContainer.style.display = 'block';
+            startGameBtn.style.display = "block"; // Cüzdan bağlandığında butonu göster
         } catch (error) {
             console.error("Wallet connection error:", error);
             alert("Wallet connection failed. Please try again.");
@@ -38,6 +43,9 @@ async function connectWallet() {
 // Click event for the wallet connection button
 connectWalletBtn.addEventListener('click', connectWallet);
 
+// Oyun başlatma butonuna tıklandığında
+startGameBtn.addEventListener('click', startGame);
+
 // Game start function
 function startGame() {
     score = 0; // Reset score
@@ -46,14 +54,15 @@ function startGame() {
     updateTimer(); // Start timer
     kittenInterval = setInterval(moveKittens, 1000); // Move kittens every second
     gameInterval = setInterval(updateGame, 1000); // Call updateGame every second
+    startGameBtn.style.display = "none"; // Oyun başladıktan sonra butonu gizle
 }
 
 // Function to move kittens
 function moveKittens() {
     const kitten = document.createElement('div');
     kitten.classList.add('kitten');
-    const randomX = Math.random() * (gameCanvas.width - 50); // 50 is kitten width
-    const randomY = Math.random() * (gameCanvas.height - 50); // 50 is kitten height
+    const randomX = Math.random() * (gameCanvas.width - 50);
+    const randomY = Math.random() * (gameCanvas.height - 50);
     kitten.style.left = `${randomX}px`;
     kitten.style.top = `${randomY}px`;
     gameCanvas.appendChild(kitten);

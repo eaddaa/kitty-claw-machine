@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kitty Claw Machine</title>
     <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
-    <script src="script.js" defer></script> <!-- Script dosyasını burada ekliyoruz -->
+    <script src="script.js" defer></script>
     <style>
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
             font-family: Arial, sans-serif;
-            background-color: #e9ecef; /* Arka plan rengi */
+            background-color: #e9ecef;
         }
         #welcomeMessage {
             margin: 20px;
@@ -39,20 +39,20 @@
             margin-bottom: 10px;
         }
         #gameCanvas {
-            border: 2px solid #000; /* Oyun alanı kenarlığı */
+            border: 2px solid #000;
             display: block;
-            margin: 0 auto; /* Ortalamak için */
-            position: relative; /* Kedilerin mutlak konumlandırılması için */
-            overflow: hidden; /* Kedilerin taşmasını önlemek için */
-            background-color: #f0f0f0; /* Oyun alanı arka plan rengi */
-            height: 300px; /* Oyun alanı yüksekliği */
-            width: 400px; /* Oyun alanı genişliği */
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            height: 300px;
+            width: 400px;
         }
         .kitten {
             position: absolute;
             width: 50px;
             height: 50px;
-            background-image: url('kitten.png'); /* Kedinin resmi */
+            background-image: url('kitten.png'); /* Kedilerin resmi burada tanımlanıyor */
             background-size: cover;
         }
         #scoreboard, #timeLeft {
@@ -70,10 +70,10 @@
     </style>
 </head>
 <body>
-    <div id="welcomeMessage">Welcome! Please connect your wallet.</div>
+    <div id="welcomeMessage">Welcome to Kitty Claw Machine! Please connect your wallet.</div>
     <button id="connectWalletBtn">Connect Wallet</button>
     <div id="gameContainer">
-        <div id="gameTitle">Catch the Kittens!</div> <!-- Oyun başlığı -->
+        <div id="gameTitle">Catch the Kittens!</div>
         <canvas id="gameCanvas" width="400" height="300"></canvas>
         <div id="scoreboard">Score: 0</div>
         <div id="timeLeft">Time Left: 60s</div>
