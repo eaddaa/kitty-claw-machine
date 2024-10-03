@@ -1,9 +1,11 @@
+// HTML Elemanlarını Seçme
 const connectWalletBtn = document.getElementById('connectWalletBtn');
 const claimRewardsBtn = document.getElementById('claimRewardsBtn');
 const welcomeMessage = document.getElementById('welcomeMessage');
 const gameCanvas = document.getElementById('gameCanvas');
-const scoreboard = document.getElementById('score');
+const scoreboard = document.getElementById('scoreboard');
 const gameContainer = document.getElementById('gameContainer');
+const timeLeftDisplay = document.getElementById('timeLeft');
 
 let userAccount;
 let web3;
@@ -11,74 +13,72 @@ let score = 0;
 let timeLeft = 60;
 let gameInterval;
 
-// Wallet connection function
+// Cüzdan Bağlantı Fonksiyonu
 async function connectWallet() {
     if (typeof window.ethereum !== 'undefined') {
-        web3 = new Web3(window.ethereum); // Use Web3.js with the ethereum object
+        web3 = new Web3(window.ethereum); // Web3.js ile ethereum nesnesini kullan
         try {
-            // Request account access from the user
+            // Kullanıcıdan hesap erişimi talep et
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             userAccount = accounts[0];
-            console.log("Connected account:", userAccount);
-            welcomeMessage.style.display = 'none'; // Hide welcome message after connecting
-            gameCanvas.style.display = 'block'; // Show the game canvas
-            gameContainer.style.display = 'block'; // Show the game box
-            startGame(); // Start the game
+            console.log("Bağlı hesap:", userAccount);
+            welcomeMessage.style.display = 'none'; // Bağlandıktan sonra hoş geldin mesajını gizle
+            gameContainer.style.display = 'block'; // Oyun kutusunu göster
+            startGame(); // Oyunu başlat
         } catch (error) {
-            console.error("Wallet connection error:", error);
-            alert("Wallet connection failed. Please try again.");
+            console.error("Cüzdan bağlantı hatası:", error);
+            alert("Cüzdan bağlantısı başarısız oldu. Lütfen tekrar deneyin.");
         }
     } else {
-        alert("Please install MetaMask.");
+        alert("Lütfen MetaMask'ı kurun.");
     }
 }
 
-// Click event for the wallet connection button
+// Bağlantı butonuna tıklama olayı
 connectWalletBtn.addEventListener('click', connectWallet);
 
-// Reward claiming function
-claimRewardsBtn.addEventListener("click", function() {
-    if (!userAccount) {
-        alert("Please connect your wallet first.");
-    } else {
-        alert("Rewards claimed successfully!"); // Placeholder for claiming rewards functionality
-    }
-});
-
-// Start the game after wallet connection
+// Oyun Başlatma Fonksiyonu
 function startGame() {
-    // Game initialization logic here (e.g., reset score, set up game canvas)
-    score = 0; // Reset score
-    timeLeft = 60; // Reset time left
-    scoreboard.textContent = `Score: ${score}`; // Display score
-    updateTimer(); // Start the timer
-    gameInterval = setInterval(updateGame, 1000); // Call updateGame every second
+    score = 0; // Skoru sıfırla
+    timeLeft = 60; // Kalan süreyi sıfırla
+    scoreboard.textContent = `Score: ${score}`; // Skoru göster
+    updateTimer(); // Zamanlayıcıyı başlat
+    gameInterval = setInterval(updateGame, 1000); // Her saniyede updateGame'i çağır
 }
 
-// Update the game state
+// Oyun durumunu güncelle
 function updateGame() {
     if (timeLeft > 0) {
         timeLeft--;
-        updateTimer(); // Update timer display
+        updateTimer(); // Zamanlayıcıyı güncelle
     } else {
         clearInterval(gameInterval);
-        alert("Game over! Your score: " + score);
+        alert("Oyun bitti! Skorunuz: " + score);
         resetGame();
     }
 }
 
-// Update timer display
+// Zamanlayıcıyı güncelle
 function updateTimer() {
-    document.getElementById('timeLeft').textContent = `Time Left: ${timeLeft}s`;
+    timeLeftDisplay.textContent = `Time Left: ${timeLeft}s`;
 }
 
-// Reset the game
+// Oyun Sıfırlama Fonksiyonu
 function resetGame() {
     score = 0;
     timeLeft = 60;
     scoreboard.textContent = `Score: ${score}`;
     updateTimer();
-    welcomeMessage.style.display = 'block'; // Show the welcome message again
-    gameCanvas.style.display = 'none'; // Hide the game canvas
-    gameContainer.style.display = 'none'; // Hide the game box
+    welcomeMessage.style.display = 'block'; // Hoş geldin mesajını tekrar göster
+    gameContainer.style.display = 'none'; // Oyun alanını gizle
 }
+
+// Ödül talep etme fonksiyonu
+claimRewardsBtn.addEventListener("click", function() {
+    if (!userAccount) {
+        alert("Lütfen önce cüzdanınızı bağlayın.");
+    } else {
+        alert("Ödüller başarıyla talep edildi!"); // Ödül talep etme işlevselliği için yer tutucu
+    }
+});
+
