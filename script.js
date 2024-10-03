@@ -106,4 +106,3 @@ claimRewardsBtn.addEventListener("click", function() {
         alert("Rewards claimed successfully!"); // Placeholder for claiming rewards functionality
     }
 });
-
