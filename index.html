@@ -5,14 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kitten Game</title>
     <style>
-        /* Add any necessary styles here */
+        /* Centering styles */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full viewport height */
+            background-color: #f0f0f0; /* Light background for contrast */
+            flex-direction: column; /* Stack elements vertically */
+        }
+
+        h1 {
+            margin-bottom: 20px; /* Space between title and buttons */
+        }
+
+        #gameContainer {
+            display: none; /* Hide game container initially */
+            text-align: center; /* Center the game content */
+        }
+
         #gameCanvas {
             position: relative;
             width: 500px;
             height: 500px;
             border: 1px solid #000;
+            margin: 20px auto; /* Center the canvas horizontally */
+            background-color: white; /* White background for the game area */
             overflow: hidden;
         }
+
         .kitten {
             position: absolute;
             width: 50px;
@@ -20,17 +41,33 @@
             background-image: url('kitten.png'); /* Path to your kitten image */
             background-size: cover;
         }
+
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF; /* Bootstrap primary color */
+            color: white;
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Darken the button on hover */
+        }
     </style>
 </head>
 <body>
     <h1 id="welcomeMessage">Welcome to the Kitten Game!</h1>
-    <div id="gameContainer" style="display: none;">
+    <div id="gameContainer">
         <div id="gameCanvas"></div>
         <div id="scoreboard">Score: 0</div>
         <div id="timeLeft">Time Left: 60s</div>
         <button id="claimRewardsBtn">Claim Rewards</button>
     </div>
     <button id="connectWalletBtn">Connect Wallet</button>
+    
     <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
     <script src="wallet.js"></script>
     <script src="script.js"></script>

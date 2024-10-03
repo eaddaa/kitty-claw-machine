@@ -24,39 +24,39 @@ let kittenInterval;
 connectWalletBtn.addEventListener('click', async () => {
     const connected = await connectWallet(); // Connect the wallet
     if (connected) {
-        welcomeMessage.style.display = 'none'; // Hide welcome message after connecting
-        gameContainer.style.display = 'block'; // Show game container
-        startGameBtn.style.display = "block"; // Show the start game button
+        welcomeMessage.style.display = 'none';
+        gameContainer.style.display = 'block';
+        startGameBtn.style.display = "block"; // Show button to start the game
     }
 });
 
-// When the start game button is clicked
+// When clicking the start game button
 startGameBtn.addEventListener('click', startGame);
 
 // Game start function
 function startGame() {
     score = 0; // Reset score
     timeLeft = 60; // Reset time
-    scoreboard.textContent = `Score: ${score}`; // Show initial score
+    scoreboard.textContent = `Score: ${score}`; // Show score
     updateTimer(); // Start timer
     kittenInterval = setInterval(moveKittens, 1000); // Move kittens every second
-    gameInterval = setInterval(updateGame, 1000); // Update game state every second
-    startGameBtn.style.display = "none"; // Hide start game button after the game starts
+    gameInterval = setInterval(updateGame, 1000); // Call updateGame every second
+    startGameBtn.style.display = "none"; // Hide button after the game starts
 }
 
 // Function to move kittens
 function moveKittens() {
     const kitten = document.createElement('div');
-    kitten.classList.add('kitten'); // Add a class for styling
-    const randomX = Math.random() * (gameCanvas.clientWidth - 50); // Random X position
-    const randomY = Math.random() * (gameCanvas.clientHeight - 50); // Random Y position
+    kitten.classList.add('kitten');
+    const randomX = Math.random() * (gameCanvas.clientWidth - 50); // Use clientWidth for proper width
+    const randomY = Math.random() * (gameCanvas.clientHeight - 50); // Use clientHeight for proper height
     kitten.style.left = `${randomX}px`;
     kitten.style.top = `${randomY}px`;
-    gameCanvas.appendChild(kitten); // Add the kitten to the canvas
+    gameCanvas.appendChild(kitten);
 
     // Add click event for the kitten
     kitten.addEventListener('click', function() {
-        score++; // Increase score on click
+        score++;
         scoreboard.textContent = `Score: ${score}`;
         gameCanvas.removeChild(kitten); // Remove the kitten after clicking
     });
@@ -73,37 +73,38 @@ function moveKittens() {
 function updateGame() {
     if (timeLeft > 0) {
         timeLeft--;
-        updateTimer(); // Update timer display
+        updateTimer(); // Update timer
     } else {
         clearInterval(gameInterval);
         clearInterval(kittenInterval);
-        alert("Game over! Your score: " + score); // Show final score
-        resetGame(); // Reset the game after time runs out
+        alert("Game over! Your score: " + score);
+        resetGame();
     }
 }
 
-// Update timer display
+// Update timer
 function updateTimer() {
-    timeLeftDisplay.textContent = `Time Left: ${timeLeft}s`; // Update time display
+    timeLeftDisplay.textContent = `Time Left: ${timeLeft}s`;
 }
 
 // Reset game function
 function resetGame() {
     score = 0;
     timeLeft = 60;
-    scoreboard.textContent = `Score: ${score}`; // Reset score display
-    updateTimer(); // Reset timer display
+    scoreboard.textContent = `Score: ${score}`;
+    updateTimer();
     welcomeMessage.style.display = 'block'; // Show welcome message again
     gameContainer.style.display = 'none'; // Hide game area
 }
 
 // Reward claiming function
 claimRewardsBtn.addEventListener("click", function() {
-    const userAccount = getUserAccount(); // Get user account
+    const userAccount = getUserAccount(); // Get wallet info
     if (!userAccount) {
-        alert("Please connect your wallet first."); // Alert if wallet not connected
+        alert("Please connect your wallet first.");
     } else {
         alert("Rewards claimed successfully!"); // Placeholder for claiming rewards functionality
     }
 });
+
 
