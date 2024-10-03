@@ -1,44 +1,86 @@
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+// HTML elementlerini seç
+const connectWalletBtn = document.getElementById('connectWalletBtn');
+const claimRewardsBtn = document.getElementById('claimRewardsBtn');
+const welcomeMessage = document.getElementById('welcomeMessage');
+const gameCanvas = document.getElementById('gameCanvas');
+const gameContainer = document.getElementById('gameContainer');
+const scoreDisplay = document.getElementById('score');
+const timerDisplay = document.getElementById('timer');
 
+let userAccount;
+let web3;
 let score = 0;
 let timeLeft = 60;
+let catX, catY, catWidth = 50, catHeight = 50;
+const ctx = gameCanvas.getContext('2d');
 
-// Kedi resmini yükleme
+// Kedi görselini yükle
 const catImage = new Image();
-catImage.src = './cat.png'; // Kedi resminin yolunu kontrol et (bu resim 'cat.png' olacak)
+catImage.src = './cat.png'; // Görselin yolunu doğrulayın
 
-// Kedi başlangıç konumu ve boyutları
-let catX = Math.random() * (canvas.width - 50);
-let catY = Math.random() * (canvas.height - 50);
-const catWidth = 50;
-const catHeight = 50;
-
-// Zamanlayıcı başlasın
-startTimer();
-
-// Kedi resmi yüklendiğinde çizim yap
-catImage.onload = function() {
-    draw();
-};
-
-// Çizim fonksiyonu
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Canvas'ı temizle
-    ctx.drawImage(catImage, catX, catY, catWidth, catHeight); // Kediyi çiz
+// Wallet bağlanma fonksiyonu
+async function connectWallet() {
+    if (typeof window.ethereum !== 'undefined') {
+        web3 = new Web3(window.ethereum); // Web3.js ile Ethereum'u kullan
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            userAccount = accounts[0];
+            console.log("Connected account:", userAccount);
+            connectWalletBtn.style.display = 'none'; // Cüzdan bağlandıktan sonra butonu gizle
+            gameContainer.style.display = 'block'; // Oyunu göster
+            startGame(); // Oyunu başlat
+        } catch (error) {
+            console.error("Wallet connection error:", error);
+            alert("Wallet connection failed. Please try again.");
+        }
+    } else {
+        alert("Please install MetaMask.");
+    }
 }
 
-// Kediye tıklanınca skoru artır ve kedi yerini değiştir
-canvas.addEventListener('click', function(event) {
-    if (event.offsetX > catX && event.offsetX < catX + catWidth &&
-        event.offsetY > catY && event.offsetY < catY + catHeight) {
-        score += 10; // Skoru 10 artır
-        document.getElementById('score').textContent = Score: ${score};
+// Click event for the wallet connection button
+connectWalletBtn.addEventListener('click', connectWallet);
 
-        // Kediyi yeni rastgele bir yere taşı
-        catX = Math.random() * (canvas.width - catWidth);
-        catY = Math.random() * (canvas.height - catHeight);
-        draw();
+// Ödül alma fonksiyonu
+claimRewardsBtn.addEventListener("click", function() {
+    if (!userAccount) {
+        alert("Please connect your wallet first.");
+    } else {
+        alert("Rewards claimed successfully!"); // Daha fazla işlevsellik ekleyebilirsiniz
+    }
+});
+
+// Oyun başlangıç fonksiyonu
+function startGame() {
+    welcomeMessage.style.display = 'none'; // Hoş geldiniz mesajını gizle
+    gameCanvas.style.display = 'block'; // Oyun alanını göster
+    startTimer(); // Zamanlayıcıyı başlat
+    moveCat(); // Kedi resmini başlat
+}
+
+// Kediyi yeni bir rastgele konuma taşı
+function moveCat() {
+    catX = Math.random() * (gameCanvas.width - catWidth);
+    catY = Math.random() * (gameCanvas.height - catHeight);
+    drawCat();
+}
+
+// Kediyi canvas üzerine çiz
+function drawCat() {
+    ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height); // Önce temizle
+    ctx.drawImage(catImage, catX, catY, catWidth, catHeight); // Yeni kediyi çiz
+}
+
+// Oyuncu kedinin üzerine tıklarsa skoru artır
+gameCanvas.addEventListener('click', function(event) {
+    const clickX = event.offsetX;
+    const clickY = event.offsetY;
+
+    // Eğer tıklama kedinin üzerindeyse
+    if (clickX > catX && clickX < catX + catWidth && clickY > catY && clickY < catY + catHeight) {
+        score += 10; // Skoru artır
+        scoreDisplay.textContent = `Score: ${score}`;
+        moveCat(); // Kediyi yeni yere taşı
     }
 });
 
@@ -46,43 +88,12 @@ canvas.addEventListener('click', function(event) {
 function startTimer() {
     const timerInterval = setInterval(function() {
         timeLeft -= 1;
-        document.getElementById('timer').textContent = Time Left: ${timeLeft}s;
+        timerDisplay.textContent = `Time Left: ${timeLeft}s`;
 
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
-            alert(Time's up! Your final score is: ${score});
+            alert(`Time's up! Your final score is: ${score}`);
         }
-    }, 1000); // Her saniyede bir geri sayım
+    }, 1000); // Her saniyede bir azalt
 }
 
-// Cüzdan bağlama butonunu yönetme
-const connectWalletBtn = document.getElementById('connectWalletBtn');
-const claimRewardsBtn = document.getElementById('claimRewardsBtn');
-
-let userAccount;
-
-// Cüzdanı bağlama fonksiyonu
-async function connectWallet() {
-    try {
-        // Kullanıcıdan cüzdan bağlantı isteği
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        userAccount = accounts[0];
-        connectWalletBtn.style.display = 'none'; // Bağlandıktan sonra butonu gizle
-        claimRewardsBtn.style.display = 'block'; // Ödül talep et butonunu göster
-        console.log("Bağlı hesap:", userAccount);
-    } catch (error) {
-        console.error("Cüzdan bağlama hatası:", error);
-    }
-}
-
-// Cüzdan bağlama butonuna tıklama olayı
-connectWalletBtn.addEventListener('click', connectWallet);
-
-// Ödül talep etme işlemi
-claimRewardsBtn.addEventListener("click", function() {
-    if (!userAccount) {
-        alert("Lütfen önce cüzdanınızı bağlayın.");
-    } else {
-        alert("Ödüller başarıyla talep edildi!"); // Burayı daha fazla işlevsellik ile güncelleyebilirsin
-    }
-});

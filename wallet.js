@@ -3,6 +3,7 @@ const claimRewardsBtn = document.getElementById('claimRewardsBtn');
 const welcomeMessage = document.getElementById('welcomeMessage');
 const gameCanvas = document.getElementById('gameCanvas');
 const scoreboard = document.getElementById('scoreboard');
+const gameContainer = document.getElementById('gameContainer');
 
 let userAccount;
 let web3;
@@ -18,7 +19,7 @@ async function connectWallet() {
             console.log("Connected account:", userAccount);
             welcomeMessage.style.display = 'none'; // Hide welcome message after connecting
             gameCanvas.style.display = 'block'; // Show the game canvas
-            scoreboard.style.display = 'flex'; // Show the scoreboard
+            gameContainer.style.display = 'block'; // Show the game box
             startGame(); // Start the game
         } catch (error) {
             console.error("Wallet connection error:", error);

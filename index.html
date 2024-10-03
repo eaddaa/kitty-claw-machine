@@ -8,18 +8,20 @@
     <link rel="stylesheet" href="styles.css"> <!-- Link to CSS -->
 </head>
 <body>
-    <div class="game-container">
+    <div class="container">
         <div id="welcomeMessage">
             <h2>🐱 ᛕᎥ丅丅Ƴ ᑕᒪᗩᗯ ᗰᗩᑕᕼᎥᑎᗴ 🐱</h2>
-            <p>To start the game, please connect your wallet!</p>
+            <p>Welcome to the game! To start, please connect your wallet.</p>
             <button id="connectWalletBtn">Connect Wallet</button>
         </div>
 
-        <div class="game-box">
-            <canvas id="gameCanvas" width="400" height="400"></canvas>
-            <div id="scoreboard">
-                <div id="score">Score: 0</div>
-                <div id="timer">Time Left: 60s</div>
+        <div class="game-container" id="gameContainer" style="display: none;">
+            <div class="game-box">
+                <canvas id="gameCanvas" width="400" height="400"></canvas>
+                <div id="scoreboard">
+                    <div id="score">Score: 0</div>
+                    <div id="timer">Time Left: 60s</div>
+                </div>
             </div>
         </div>
 
