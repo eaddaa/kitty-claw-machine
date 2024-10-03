@@ -107,4 +107,3 @@ claimRewardsBtn.addEventListener("click", function() {
     }
 });
 
-
