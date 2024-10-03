@@ -37,19 +37,19 @@ startGameBtn.addEventListener('click', startGame);
 function startGame() {
     score = 0; // Reset score
     timeLeft = 60; // Reset time
-    scoreboard.textContent = `Score: ${score}`; // Show score
+    scoreboard.textContent = `Score: ${score}`; // Show initial score
     updateTimer(); // Start timer
     kittenInterval = setInterval(moveKittens, 1000); // Move kittens every second
-    gameInterval = setInterval(updateGame, 1000); // Call updateGame every second
-    startGameBtn.style.display = "none"; // Hide start game button after game starts
+    gameInterval = setInterval(updateGame, 1000); // Update game state every second
+    startGameBtn.style.display = "none"; // Hide start game button after the game starts
 }
 
 // Function to move kittens
 function moveKittens() {
     const kitten = document.createElement('div');
     kitten.classList.add('kitten'); // Add a class for styling
-    const randomX = Math.random() * (gameCanvas.clientWidth - 50); // Ensure it fits in the canvas
-    const randomY = Math.random() * (gameCanvas.clientHeight - 50);
+    const randomX = Math.random() * (gameCanvas.clientWidth - 50); // Random X position
+    const randomY = Math.random() * (gameCanvas.clientHeight - 50); // Random Y position
     kitten.style.left = `${randomX}px`;
     kitten.style.top = `${randomY}px`;
     gameCanvas.appendChild(kitten); // Add the kitten to the canvas
@@ -73,26 +73,26 @@ function moveKittens() {
 function updateGame() {
     if (timeLeft > 0) {
         timeLeft--;
-        updateTimer(); // Update timer
+        updateTimer(); // Update timer display
     } else {
         clearInterval(gameInterval);
         clearInterval(kittenInterval);
-        alert("Game over! Your score: " + score);
+        alert("Game over! Your score: " + score); // Show final score
         resetGame(); // Reset the game after time runs out
     }
 }
 
 // Update timer display
 function updateTimer() {
-    timeLeftDisplay.textContent = `Time Left: ${timeLeft}s`;
+    timeLeftDisplay.textContent = `Time Left: ${timeLeft}s`; // Update time display
 }
 
 // Reset game function
 function resetGame() {
     score = 0;
     timeLeft = 60;
-    scoreboard.textContent = `Score: ${score}`;
-    updateTimer();
+    scoreboard.textContent = `Score: ${score}`; // Reset score display
+    updateTimer(); // Reset timer display
     welcomeMessage.style.display = 'block'; // Show welcome message again
     gameContainer.style.display = 'none'; // Hide game area
 }
@@ -101,7 +101,7 @@ function resetGame() {
 claimRewardsBtn.addEventListener("click", function() {
     const userAccount = getUserAccount(); // Get user account
     if (!userAccount) {
-        alert("Please connect your wallet first.");
+        alert("Please connect your wallet first."); // Alert if wallet not connected
     } else {
         alert("Rewards claimed successfully!"); // Placeholder for claiming rewards functionality
     }

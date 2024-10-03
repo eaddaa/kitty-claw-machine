@@ -3,82 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kitty Claw Machine</title>
-    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
-    <script src="wallet.js" defer></script>
-    <script src="script.js" defer></script>
+    <title>Kitten Game</title>
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            background-color: #e9ecef;
-        }
-        #welcomeMessage {
-            margin: 20px;
-            font-size: 20px;
-        }
-        #connectWalletBtn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #gameContainer {
-            display: none;
-            text-align: center;
-            margin-top: 20px;
-        }
-        #gameTitle {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
+        /* Add any necessary styles here */
         #gameCanvas {
-            border: 2px solid #000;
-            display: block;
-            margin: 0 auto;
             position: relative;
+            width: 500px;
+            height: 500px;
+            border: 1px solid #000;
             overflow: hidden;
-            background-color: #f0f0f0;
-            height: 300px;
-            width: 400px;
         }
         .kitten {
             position: absolute;
             width: 50px;
             height: 50px;
-            background-image: url('kitten.png'); /* Kedi resminizi buraya ekleyin */
+            background-image: url('kitten.png'); /* Path to your kitten image */
             background-size: cover;
-        }
-        #scoreboard, #timeLeft {
-            margin: 10px 0;
-            font-size: 18px;
-        }
-        #claimRewardsBtn {
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div id="welcomeMessage">Welcome to Kitty Claw Machine! Please connect your wallet.</div>
-    <button id="connectWalletBtn">Connect Wallet</button>
-    <div id="gameContainer">
-        <div id="gameTitle">Catch the Kittens!</div>
-        <canvas id="gameCanvas" width="400" height="300"></canvas>
+    <h1 id="welcomeMessage">Welcome to the Kitten Game!</h1>
+    <div id="gameContainer" style="display: none;">
+        <div id="gameCanvas"></div>
         <div id="scoreboard">Score: 0</div>
         <div id="timeLeft">Time Left: 60s</div>
         <button id="claimRewardsBtn">Claim Rewards</button>
     </div>
+    <button id="connectWalletBtn">Connect Wallet</button>
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+    <script src="wallet.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
