@@ -1,9 +1,8 @@
-// Manage the wallet connection button
 const connectWalletBtn = document.getElementById('connectWalletBtn');
 const claimRewardsBtn = document.getElementById('claimRewardsBtn');
 const welcomeMessage = document.getElementById('welcomeMessage');
-const gameContainer = document.getElementById('gameContainer'); // Game container for the canvas
 const gameCanvas = document.getElementById('gameCanvas');
+const scoreboard = document.getElementById('scoreboard');
 
 let userAccount;
 let web3;
@@ -17,9 +16,10 @@ async function connectWallet() {
             const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
             userAccount = accounts[0];
             console.log("Connected account:", userAccount);
-            connectWalletBtn.style.display = 'none'; // Hide button after connecting
-            claimRewardsBtn.style.display = 'block'; // Show claim rewards button
-            startGame(); // Start the game after connecting
+            welcomeMessage.style.display = 'none'; // Hide welcome message after connecting
+            gameCanvas.style.display = 'block'; // Show the game canvas
+            scoreboard.style.display = 'flex'; // Show the scoreboard
+            startGame(); // Start the game
         } catch (error) {
             console.error("Wallet connection error:", error);
             alert("Wallet connection failed. Please try again.");
@@ -37,20 +37,6 @@ claimRewardsBtn.addEventListener("click", function() {
     if (!userAccount) {
         alert("Please connect your wallet first.");
     } else {
-        alert("Rewards claimed successfully!"); // Update this with more functionality as needed
+        alert("Rewards claimed successfully!"); // Placeholder for claiming rewards functionality
     }
 });
-
-// Start the game after wallet connection
-function startGame() {
-    welcomeMessage.style.display = 'none'; // Hide the welcome message
-    gameContainer.style.display = 'block'; // Show the game container
-    gameCanvas.style.display = 'block'; // Show the game canvas
-    initializeGame(); // Initialize game state if needed
-}
-
-// Example initialization function for game state (you can expand this)
-function initializeGame() {
-    // Reset scores, timers, and other necessary game variables
-    console.log("Game initialized.");
-}

@@ -1,29 +1,52 @@
 body {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     height: 100vh;
     margin: 0;
     font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
 }
 
-#welcomeMessage {
+.game-container {
     text-align: center;
 }
 
-#gameContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 #gameCanvas {
-    border: 2px solid #000; /* Add a border to the game canvas */
-    margin-bottom: 20px; /* Space between the canvas and the score/timer */
+    border: 3px solid #000;
+    display: none; /* Başlangıçta gizli, cüzdan bağlandıktan sonra gösterilecek */
+    margin: 20px auto;
 }
 
-#score, #timer {
-    font-size: 20px;
-    margin: 5px; /* Space between score/timer */
+#scoreboard {
+    margin-top: 20px;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    width: 400px;
+    margin: 0 auto;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    background-color: #ff7f50;
+    border: none;
+    color: white;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #ff6347;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 18px;
 }

@@ -1,66 +1,60 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-let catX = canvas.width / 2; // Initial X position (middle of the canvas)
-let catY = canvas.height / 2; // Initial Y position (middle of the canvas)
-let catSize = 20; // Size of the "cat"
 let score = 0;
-let timeLeft = 60; // Game time in seconds
-let gameInterval;
-let timerInterval;
+let timeLeft = 60;
 
-// Function to draw the cat
-function drawCat() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-    ctx.fillStyle = 'orange'; // Cat color
-    ctx.fillRect(catX, catY, catSize, catSize); // Draw the cat
+// Load cat image
+const catImage = new Image();
+catImage.src = './cat.png'; // Make sure this image exists in the same directory
+
+// Cat initial position and dimensions
+let catX = Math.random() * (canvas.width - 50);
+let catY = Math.random() * (canvas.height - 50);
+const catWidth = 50;
+const catHeight = 50;
+
+// Start the timer
+function startGame() {
+    startTimer();
+    draw(); // Initial draw of the cat
 }
 
-// Handle player input to move the cat
-document.addEventListener('keydown', function(event) {
-    const speed = 10; // How fast the cat moves
-    if (event.key === 'ArrowUp') {
-        catY = Math.max(0, catY - speed); // Move up, ensure it doesn't go out of bounds
-    } else if (event.key === 'ArrowDown') {
-        catY = Math.min(canvas.height - catSize, catY + speed); // Move down
-    } else if (event.key === 'ArrowLeft') {
-        catX = Math.max(0, catX - speed); // Move left
-    } else if (event.key === 'ArrowRight') {
-        catX = Math.min(canvas.width - catSize, catX + speed); // Move right
+// Draw the cat image when loaded
+catImage.onload = function() {
+    draw();
+};
+
+// Draw function
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+    ctx.drawImage(catImage, catX, catY, catWidth, catHeight); // Draw the cat
+}
+
+// Click event to increase score and move the cat
+canvas.addEventListener('click', function(event) {
+    if (event.offsetX > catX && event.offsetX < catX + catWidth &&
+        event.offsetY > catY && event.offsetY < catY + catHeight) {
+        score += 10; // Increase score by 10
+        document.getElementById('score').textContent = `Score: ${score}`;
+
+        // Move the cat to a new random position
+        catX = Math.random() * (canvas.width - catWidth);
+        catY = Math.random() * (canvas.height - catHeight);
+        draw();
     }
-    score += 1; // Increase score with each move
-    document.getElementById('score').innerText = 'Score: ' + score; // Update score display
-    drawCat(); // Redraw the cat at the new position
 });
 
-// Function to start the game and the timer
-function initializeGame() {
-    score = 0; // Reset score
-    timeLeft = 60; // Reset timer to 60 seconds
-    document.getElementById('score').innerText = 'Score: ' + score;
-    document.getElementById('timer').innerText = 'Time Left: ' + timeLeft + 's';
-    drawCat(); // Draw the cat in the initial position
+// Timer function
+function startTimer() {
+    const timerInterval = setInterval(function() {
+        timeLeft -= 1;
+        document.getElementById('timer').textContent = `Time Left: ${timeLeft}s`;
 
-    // Game logic interval (redraw the cat every 20ms)
-    gameInterval = setInterval(drawCat, 20);
-
-    // Timer countdown
-    timerInterval = setInterval(() => {
-        timeLeft--;
-        document.getElementById('timer').innerText = 'Time Left: ' + timeLeft + 's';
         if (timeLeft <= 0) {
-            clearInterval(gameInterval); // Stop the game when time is up
-            clearInterval(timerInterval); // Stop the timer
-            alert("Game over! Your final score is: " + score);
+            clearInterval(timerInterval);
+            alert(`Time's up! Your final score is: ${score}`);
         }
-    }, 1000); // Update timer every second
+    }, 1000); // Countdown every second
 }
-
-// This function is called from your wallet connection logic when the game starts
-function startGame() {
-    welcomeMessage.style.display = 'none'; // Hide welcome message
-    gameContainer.style.display = 'block'; // Show the game container
-    initializeGame(); // Initialize and start the game
-}
-
 
