@@ -1,80 +1,32 @@
-/* Genel stil ayarları */
+/* Sayfanın ortasında her şeyi hizalar */
 body, html {
     height: 100%;
     margin: 0;
-    font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
 }
 
-/* Tüm içeriğin ortalanması */
-.container {
+#gameContainer {
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-}
-
-/* Oyun kutusu stili */
-.game-container {
-    display: flex;
-    justify-content: center;
-}
-
-.game-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 4px solid #000;
-    padding: 20px;
+    width: 400px; /* Kare alan */
     background-color: #fff;
-    border-radius: 15px;
-    width: 450px;
+    padding: 20px;
+    border: 2px solid #ccc;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
-/* Kanvas ve yazıların ortalanması */
 #gameCanvas {
-    border: 2px solid #000;
-    display: none; /* Başlangıçta gizli, bağlantı kurulduğunda gösterilecek */
+    border: 2px solid #333;
+    display: none; /* Oyunun başlamasını bekliyor */
+    margin: 20px 0;
 }
 
-/* Skor ve zaman göstergesinin hizalanması */
-#scoreboard {
-    margin-top: 20px;
-    font-size: 18px;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
-
-/* Butonların stili */
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    margin-top: 10px;
-    cursor: pointer;
-    background-color: #ff7f50;
-    border: none;
-    color: white;
-    border-radius: 5px;
-}
-
-button:hover {
-    background-color: #ff6347;
-}
-
-h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-p {
-    font-size: 18px;
+#scoreDisplay, #timerDisplay {
+    margin: 10px;
+    font-size: 1.2em;
 }
 

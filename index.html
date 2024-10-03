@@ -3,34 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kitty Claw Machine</title>
+    <title>Kitty Claw Machine 🐱</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.6.1/web3.min.js"></script>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to CSS -->
+    <link rel="stylesheet" href="styles.css"> <!-- CSS dosyasını bağla -->
 </head>
 <body>
-    <div class="container">
-        <div id="welcomeMessage">
-            <h2>🐱 ᛕᎥ丅丅Ƴ ᑕᒪᗩᗯ ᗰᗩᑕᕼᎥᑎᗴ 🐱</h2>
-            <p>Welcome to the game! To start, please connect your wallet.</p>
-            <button id="connectWalletBtn">Connect Wallet</button>
-        </div>
-
-        <div class="game-container" id="gameContainer" style="display: none;">
-            <div class="game-box">
-                <canvas id="gameCanvas" width="400" height="400"></canvas>
-                <div id="scoreboard">
-                    <div id="score">Score: 0</div>
-                    <div id="timer">Time Left: 60s</div>
-                </div>
-            </div>
-        </div>
-
-        <div id="claimRewardsContainer" style="display: none;">
-            <button id="claimRewardsBtn">Claim Rewards</button>
-        </div>
+    <div id="gameContainer">
+        <h2>🐱 ᛕᎥ丅 丅 Ƴ ᑕᒪᗩᗯ ᗰᗩᑕᕼᎥᑎᗴ 🐱</h2>
+        <p id="message">Please connect your wallet to start the game</p>
+        <button id="connectWalletBtn">Connect Wallet</button>
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <div id="scoreDisplay">Score: 0</div>
+        <div id="timerDisplay">Time Left: 60s</div>
+        <button id="claimRewardsBtn" style="display:none;">Claim Rewards</button>
     </div>
-    
-    <script src="wallet.js"></script> <!-- Link to Wallet JS -->
-    <script src="game.js"></script> <!-- Link to Game JS -->
+    <script src="script.js"></script> <!-- Oyun kodları -->
 </body>
 </html>
