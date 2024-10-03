@@ -2,7 +2,7 @@
 const connectWalletBtn = document.getElementById('connectWalletBtn');
 const claimRewardsBtn = document.getElementById('claimRewardsBtn');
 const welcomeMessage = document.getElementById('welcomeMessage');
-const gameContainer = document.getElementById('gameContainer'); // Assuming you have a game container
+const gameContainer = document.getElementById('gameContainer'); // Game container for the canvas
 const gameCanvas = document.getElementById('gameCanvas');
 
 let userAccount;
