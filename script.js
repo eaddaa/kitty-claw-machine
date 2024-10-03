@@ -9,10 +9,10 @@ const scoreboard = document.getElementById('scoreboard');
 const gameContainer = document.getElementById('gameContainer');
 const timeLeftDisplay = document.getElementById('timeLeft');
 
-// Yeni buton
+// New button for starting the game
 const startGameBtn = document.createElement('button');
 startGameBtn.textContent = "Start Game";
-startGameBtn.style.display = "none"; // İlk başta görünmez
+startGameBtn.style.display = "none"; // Initially hidden
 document.body.appendChild(startGameBtn);
 
 let score = 0;
@@ -22,15 +22,15 @@ let kittenInterval;
 
 // Click event for the wallet connection button
 connectWalletBtn.addEventListener('click', async () => {
-    const connected = await connectWallet(); // cüzdanı bağla
+    const connected = await connectWallet(); // Connect the wallet
     if (connected) {
-        welcomeMessage.style.display = 'none';
-        gameContainer.style.display = 'block';
-        startGameBtn.style.display = "block"; // Cüzdan bağlandığında butonu göster
+        welcomeMessage.style.display = 'none'; // Hide welcome message after connecting
+        gameContainer.style.display = 'block'; // Show game container
+        startGameBtn.style.display = "block"; // Show the start game button
     }
 });
 
-// Oyun başlatma butonuna tıklandığında
+// When the start game button is clicked
 startGameBtn.addEventListener('click', startGame);
 
 // Game start function
@@ -41,22 +41,22 @@ function startGame() {
     updateTimer(); // Start timer
     kittenInterval = setInterval(moveKittens, 1000); // Move kittens every second
     gameInterval = setInterval(updateGame, 1000); // Call updateGame every second
-    startGameBtn.style.display = "none"; // Oyun başladıktan sonra butonu gizle
+    startGameBtn.style.display = "none"; // Hide start game button after game starts
 }
 
 // Function to move kittens
 function moveKittens() {
     const kitten = document.createElement('div');
-    kitten.classList.add('kitten');
-    const randomX = Math.random() * (gameCanvas.width - 50);
-    const randomY = Math.random() * (gameCanvas.height - 50);
+    kitten.classList.add('kitten'); // Add a class for styling
+    const randomX = Math.random() * (gameCanvas.clientWidth - 50); // Ensure it fits in the canvas
+    const randomY = Math.random() * (gameCanvas.clientHeight - 50);
     kitten.style.left = `${randomX}px`;
     kitten.style.top = `${randomY}px`;
-    gameCanvas.appendChild(kitten);
+    gameCanvas.appendChild(kitten); // Add the kitten to the canvas
 
     // Add click event for the kitten
     kitten.addEventListener('click', function() {
-        score++;
+        score++; // Increase score on click
         scoreboard.textContent = `Score: ${score}`;
         gameCanvas.removeChild(kitten); // Remove the kitten after clicking
     });
@@ -78,11 +78,11 @@ function updateGame() {
         clearInterval(gameInterval);
         clearInterval(kittenInterval);
         alert("Game over! Your score: " + score);
-        resetGame();
+        resetGame(); // Reset the game after time runs out
     }
 }
 
-// Update timer
+// Update timer display
 function updateTimer() {
     timeLeftDisplay.textContent = `Time Left: ${timeLeft}s`;
 }
@@ -99,7 +99,7 @@ function resetGame() {
 
 // Reward claiming function
 claimRewardsBtn.addEventListener("click", function() {
-    const userAccount = getUserAccount(); // cüzdan bilgisini al
+    const userAccount = getUserAccount(); // Get user account
     if (!userAccount) {
         alert("Please connect your wallet first.");
     } else {
