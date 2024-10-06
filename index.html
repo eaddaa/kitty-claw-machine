@@ -5,40 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kitten Game</title>
     <style>
-        /* Modernize and Centering styles */
+        /* Genel stil düzenlemeleri */
         body {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh; /* Full viewport height */
-            background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%); /* Gradient background */
-            font-family: 'Roboto', sans-serif; /* Modern font */
-            flex-direction: column; /* Stack elements vertically */
-            margin: 0;
-            padding: 0;
+            height: 100vh; /* Tam ekran yüksekliği */
+            background-color: #f0f0f0; /* Arka plan rengi */
+            flex-direction: column; /* Elemanları dikey hizala */
         }
 
         h1 {
-            margin-bottom: 20px; /* Space between title and buttons */
-            color: #333;
-            font-size: 2.5em; /* Larger title font size */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Title shadow for more professional look */
+            margin-bottom: 20px; /* Başlık ile düğmeler arasında boşluk */
         }
 
         #gameContainer {
-            display: none; /* Hide game container initially */
-            text-align: center; /* Center the game content */
+            display: none; /* Başlangıçta gizli */
+            text-align: center; /* Oyun alanı içeriklerini ortala */
         }
 
         #gameCanvas {
             position: relative;
             width: 500px;
             height: 500px;
-            border: 3px solid #007BFF; /* Thicker border for the game area */
-            margin: 20px auto; /* Center the canvas horizontally */
-            background-color: #fff; /* White background for the game area */
-            border-radius: 15px; /* Slightly rounded corners for modern look */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow for depth */
+            border: 1px solid #000;
+            margin: 20px auto; /* Ortala */
+            background-color: white; /* Oyun alanı beyaz */
             overflow: hidden;
         }
 
@@ -46,7 +38,7 @@
             position: absolute;
             width: 50px;
             height: 50px;
-            background-image: url('kitten.png'); /* Path to your kitten image */
+            background-image: url('kitten.png'); /* Kedi resmi */
             background-size: cover;
         }
 
@@ -57,20 +49,12 @@
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #007BFF; /* Bootstrap primary color */
+            background-color: #007BFF; /* Bootstrap mavi renk */
             color: white;
-            transition: background-color 0.3s ease;
         }
 
         button:hover {
-            background-color: #0056b3; /* Darken the button on hover */
-        }
-
-        #scoreboard, #timeLeft {
-            font-size: 18px;
-            color: #333;
-            margin: 10px 0;
-            font-weight: 500;
+            background-color: #0056b3; /* Düğme üzerine gelince rengi koyulaştır */
         }
     </style>
 </head>
@@ -84,55 +68,28 @@
     </div>
     <button id="connectWalletBtn">Connect Wallet</button>
 
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script>
-        // Web3.js and wallet connection
-        let web3;
-        let accounts;
-
-        document.getElementById('connectWalletBtn').addEventListener('click', async () => {
+        // Cüzdanı bağlama işlevi
+        async function connectWallet() {
             if (window.ethereum) {
-                web3 = new Web3(window.ethereum);
                 try {
-                    accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
                     document.getElementById('welcomeMessage').innerText = `Connected: ${accounts[0]}`;
                     document.getElementById('connectWalletBtn').style.display = 'none';
-                    document.getElementById('gameContainer').style.display = 'block'; // Show game after wallet connect
+                    document.getElementById('gameContainer').style.display = 'block'; // Cüzdan bağlandıktan sonra oyunu göster
                 } catch (error) {
-                    console.error("User rejected the connection");
+                    console.error("Wallet connection failed: ", error);
                 }
             } else {
                 alert("Please install MetaMask!");
             }
-        });
-
-        // Basic game logic (dummy for now)
-        let score = 0;
-        let timeLeft = 60;
-
-        // Start the game
-        function startGame() {
-            document.getElementById('scoreboard').innerText = `Score: ${score}`;
-            document.getElementById('timeLeft').innerText = `Time Left: ${timeLeft}s`;
-
-            // Simulate countdown
-            const countdownInterval = setInterval(() => {
-                if (timeLeft > 0) {
-                    timeLeft--;
-                    document.getElementById('timeLeft').innerText = `Time Left: ${timeLeft}s`;
-                } else {
-                    clearInterval(countdownInterval);
-                    document.getElementById('claimRewardsBtn').disabled = false;
-                    alert("Time's up! Claim your rewards.");
-                }
-            }, 1000);
         }
 
-        // Reward claim logic
-        document.getElementById('claimRewardsBtn').addEventListener('click', () => {
-            alert(`You scored ${score} points!`);
-        });
-
-        startGame();
+        // Cüzdan bağlama butonu tıklama olayı
+        document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
     </script>
+    <script src="wallet.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
