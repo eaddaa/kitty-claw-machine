@@ -7,21 +7,30 @@
     <style>
         /* Genel stil düzenlemeleri */
         body {
+            font-family: 'Arial', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh; /* Tam ekran yüksekliği */
-            background-color: #f0f0f0; /* Arka plan rengi */
+            background: linear-gradient(to right, #ffccbc, #ffe0b2); /* Geçişli arka plan */
+            color: #333;
             flex-direction: column; /* Elemanları dikey hizala */
+            transition: background 0.5s; /* Arka plan geçiş efekti */
         }
 
         h1 {
             margin-bottom: 20px; /* Başlık ile düğmeler arasında boşluk */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Başlık gölgesi */
         }
 
         #gameContainer {
             display: none; /* Başlangıçta gizli */
             text-align: center; /* Oyun alanı içeriklerini ortala */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Gölge efekti */
+            background-color: white; /* Oyun alanı beyaz */
+            transition: all 0.3s ease; /* Geçiş efekti */
         }
 
         #gameCanvas {
@@ -30,8 +39,10 @@
             height: 500px;
             border: 1px solid #000;
             margin: 20px auto; /* Ortala */
-            background-color: white; /* Oyun alanı beyaz */
+            background-color: #ffffff; /* Oyun alanı beyaz */
             overflow: hidden;
+            border-radius: 10px; /* Kenar yuvarlama */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Gölge efekti */
         }
 
         .kitten {
@@ -51,10 +62,17 @@
             border-radius: 5px;
             background-color: #007BFF; /* Bootstrap mavi renk */
             color: white;
+            transition: background 0.3s; /* Düğme geçiş efekti */
         }
 
         button:hover {
             background-color: #0056b3; /* Düğme üzerine gelince rengi koyulaştır */
+        }
+
+        #scoreboard, #timeLeft {
+            font-size: 18px; /* Puan ve zaman yazı boyutu */
+            margin: 10px 0;
+            color: #555; /* Yazı rengi */
         }
     </style>
 </head>
@@ -78,11 +96,33 @@
                     document.getElementById('welcomeMessage').innerText = `Connected: ${accounts[0]}`;
                     document.getElementById('connectWalletBtn').style.display = 'none';
                     document.getElementById('gameContainer').style.display = 'block'; // Cüzdan bağlandıktan sonra oyunu göster
+                    document.body.style.background = 'linear-gradient(to right, #ffccbc, #ffe0b2)'; // Bağlandıktan sonra arka planı değiştir
+                    startGame(); // Oyunu başlat
                 } catch (error) {
                     console.error("Wallet connection failed: ", error);
                 }
             } else {
                 alert("Please install MetaMask!");
+            }
+        }
+
+        // Oyun başlatma işlevi (örnek)
+        function startGame() {
+            // Burada oyunu başlatacak kodu ekleyebilirsiniz.
+            console.log("Game started!");
+            // Örnek: Kedileri rastgele yerleştirme
+            spawnKittens();
+        }
+
+        // Kedileri oluşturma işlevi (örnek)
+        function spawnKittens() {
+            const canvas = document.getElementById('gameCanvas');
+            for (let i = 0; i < 5; i++) {
+                const kitten = document.createElement('div');
+                kitten.className = 'kitten';
+                kitten.style.top = Math.random() * (canvas.offsetHeight - 50) + 'px';
+                kitten.style.left = Math.random() * (canvas.offsetWidth - 50) + 'px';
+                canvas.appendChild(kitten);
             }
         }
 
