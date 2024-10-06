@@ -83,6 +83,7 @@
         <div id="scoreboard">Score: 0</div>
         <div id="timeLeft">Time Left: 60s</div>
         <button id="claimRewardsBtn">Claim Rewards</button>
+        <button id="startGameBtn">Start Game</button> <!-- Oyun başlatma butonu -->
     </div>
     <button id="connectWalletBtn">Connect Wallet</button>
 
@@ -92,8 +93,13 @@
         Your browser does not support the audio element.
     </audio>
 
+    <button id="playMusicBtn">Play Music</button> <!-- Müzik başlatma butonu -->
+    <button id="pauseMusicBtn">Pause Music</button> <!-- Müzik durdurma butonu -->
+
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script>
+        let isMusicPlaying = false; // Müziğin durumunu takip et
+
         // Cüzdanı bağlama işlevi
         async function connectWallet() {
             if (window.ethereum) {
@@ -102,8 +108,6 @@
                     document.getElementById('welcomeMessage').innerText = `Connected: ${accounts[0]}`;
                     document.getElementById('connectWalletBtn').style.display = 'none';
                     document.getElementById('gameContainer').style.display = 'block'; // Cüzdan bağlandıktan sonra oyunu göster
-                    startGame(); // Oyunu başlat
-                    playMusic(); // Müzikleri başlat
                 } catch (error) {
                     console.error("Wallet connection failed: ", error);
                 }
@@ -112,14 +116,14 @@
             }
         }
 
-        // Oyun başlatma işlevi (örnek)
+        // Oyun başlatma işlevi
         function startGame() {
             console.log("Game started!");
-            // Örnek: Kedileri rastgele yerleştirme
-            spawnKittens();
+            document.getElementById('gameContainer').style.display = 'block'; // Oyun alanını göster
+            spawnKittens(); // Kedileri oluştur
         }
 
-        // Kedileri oluşturma işlevi (örnek)
+        // Kedileri oluşturma işlevi
         function spawnKittens() {
             const canvas = document.getElementById('gameCanvas');
             for (let i = 0; i < 5; i++) {
@@ -137,10 +141,21 @@
             music.play().catch((error) => {
                 console.error("Music playback failed: ", error);
             });
+            isMusicPlaying = true; // Müziğin durumunu güncelle
         }
 
-        // Cüzdan bağlama butonu tıklama olayı
+        // Müziği durdurma işlevi
+        function pauseMusic() {
+            const music = document.getElementById('backgroundMusic');
+            music.pause();
+            isMusicPlaying = false; // Müziğin durumunu güncelle
+        }
+
+        // Oyun başlatma butonu tıklama olayı
         document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
+        document.getElementById('startGameBtn').addEventListener('click', startGame); // Oyun başlatma butonu için olay
+        document.getElementById('playMusicBtn').addEventListener('click', playMusic); // Müzik başlatma butonu için olay
+        document.getElementById('pauseMusicBtn').addEventListener('click', pauseMusic); // Müzik durdurma butonu için olay
     </script>
     <script src="wallet.js"></script>
     <script src="script.js"></script>
