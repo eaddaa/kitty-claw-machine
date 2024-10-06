@@ -5,18 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kitten Game</title>
     <style>
-        /* Centering styles */
+        /* Modernize and Centering styles */
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh; /* Full viewport height */
-            background-color: #f0f0f0; /* Light background for contrast */
+            background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%); /* Gradient background */
+            font-family: 'Roboto', sans-serif; /* Modern font */
             flex-direction: column; /* Stack elements vertically */
+            margin: 0;
+            padding: 0;
         }
 
         h1 {
             margin-bottom: 20px; /* Space between title and buttons */
+            color: #333;
+            font-size: 2.5em; /* Larger title font size */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Title shadow for more professional look */
         }
 
         #gameContainer {
@@ -28,9 +34,11 @@
             position: relative;
             width: 500px;
             height: 500px;
-            border: 1px solid #000;
+            border: 3px solid #007BFF; /* Thicker border for the game area */
             margin: 20px auto; /* Center the canvas horizontally */
-            background-color: white; /* White background for the game area */
+            background-color: #fff; /* White background for the game area */
+            border-radius: 15px; /* Slightly rounded corners for modern look */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow for depth */
             overflow: hidden;
         }
 
@@ -51,15 +59,23 @@
             border-radius: 5px;
             background-color: #007BFF; /* Bootstrap primary color */
             color: white;
+            transition: background-color 0.3s ease;
         }
 
         button:hover {
             background-color: #0056b3; /* Darken the button on hover */
         }
+
+        #scoreboard, #timeLeft {
+            font-size: 18px;
+            color: #333;
+            margin: 10px 0;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
-    <h1 id="welcomeMessage">🐱Ⓦⓔⓛⓒⓞⓜⓔ ⓣⓞ ⓣⓗⓔ Ⓚⓘⓣⓣⓨ Ⓖⓐⓜⓔ🐱</h1>
+    <h1 id="welcomeMessage">Welcome to the Kitten Game!</h1>
     <div id="gameContainer">
         <div id="gameCanvas"></div>
         <div id="scoreboard">Score: 0</div>
@@ -67,9 +83,56 @@
         <button id="claimRewardsBtn">Claim Rewards</button>
     </div>
     <button id="connectWalletBtn">Connect Wallet</button>
-    
-    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
-    <script src="wallet.js"></script>
-    <script src="script.js"></script>
+
+    <script>
+        // Web3.js and wallet connection
+        let web3;
+        let accounts;
+
+        document.getElementById('connectWalletBtn').addEventListener('click', async () => {
+            if (window.ethereum) {
+                web3 = new Web3(window.ethereum);
+                try {
+                    accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    document.getElementById('welcomeMessage').innerText = `Connected: ${accounts[0]}`;
+                    document.getElementById('connectWalletBtn').style.display = 'none';
+                    document.getElementById('gameContainer').style.display = 'block'; // Show game after wallet connect
+                } catch (error) {
+                    console.error("User rejected the connection");
+                }
+            } else {
+                alert("Please install MetaMask!");
+            }
+        });
+
+        // Basic game logic (dummy for now)
+        let score = 0;
+        let timeLeft = 60;
+
+        // Start the game
+        function startGame() {
+            document.getElementById('scoreboard').innerText = `Score: ${score}`;
+            document.getElementById('timeLeft').innerText = `Time Left: ${timeLeft}s`;
+
+            // Simulate countdown
+            const countdownInterval = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    document.getElementById('timeLeft').innerText = `Time Left: ${timeLeft}s`;
+                } else {
+                    clearInterval(countdownInterval);
+                    document.getElementById('claimRewardsBtn').disabled = false;
+                    alert("Time's up! Claim your rewards.");
+                }
+            }, 1000);
+        }
+
+        // Reward claim logic
+        document.getElementById('claimRewardsBtn').addEventListener('click', () => {
+            alert(`You scored ${score} points!`);
+        });
+
+        startGame();
+    </script>
 </body>
 </html>
