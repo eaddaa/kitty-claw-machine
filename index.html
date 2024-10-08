@@ -22,8 +22,6 @@
         h1 {
             margin-bottom: 20px; /* Space between title and buttons */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Title shadow */
-            font-size: 36px; /* Title font size */
-            color: #fff; /* Title color */
         }
 
         #gameContainer {
@@ -56,20 +54,19 @@
         }
 
         button {
-            padding: 15px 30px; /* Increased padding for larger buttons */
+            padding: 10px 20px;
             margin: 10px;
-            font-size: 20px; /* Increased font size */
-            font-weight: bold; /* Bold font */
+            font-size: 16px;
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #00BFFF; /* Bright turquoise color */
+            background-color: #00bfff; /* Açık turkuaz rengi */
             color: white;
             transition: background 0.3s; /* Button transition effect */
         }
 
         button:hover {
-            background-color: #008CBA; /* Darker color when hovering */
+            background-color: #0086b3; /* Daha koyu renk hover için */
         }
 
         #scoreboard, #timeLeft {
@@ -80,13 +77,15 @@
     </style>
 </head>
 <body>
-    <h1 id="welcomeMessage">KITTYVERSE GAME</h1> <!-- Updated welcome message -->
+    <h1 id="welcomeMessage">
+        <img src="KITTYVERSE-GAME.png" alt="Kittyverse Game" style="width: 200px; height: auto;"> <!-- Logo -->
+    </h1>
     <div id="gameContainer">
         <div id="gameCanvas"></div>
         <div id="scoreboard">Score: 0</div>
         <div id="timeLeft">Time Left: 60s</div>
         <button id="claimRewardsBtn">Claim Rewards</button>
-        <button id="startGameBtn" style="display: none;">Start Game</button> <!-- Start game button -->
+        <button id="startGameBtn">Start Game</button> <!-- Start game button -->
     </div>
     <button id="connectWalletBtn">Connect Wallet</button>
 
@@ -100,6 +99,66 @@
     <button id="pauseMusicBtn">Pause Music</button> <!-- Pause music button -->
 
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script>
+        let isMusicPlaying = false; // Track the music status
+
+        // Function to connect wallet
+        async function connectWallet() {
+            if (window.ethereum) {
+                try {
+                    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                    document.getElementById('welcomeMessage').innerText = `Connected: ${accounts[0]}`;
+                    document.getElementById('connectWalletBtn').style.display = 'none';
+                    document.getElementById('gameContainer').style.display = 'block'; // Show the game after connecting wallet
+                } catch (error) {
+                    console.error("Wallet connection failed: ", error);
+                }
+            } else {
+                alert("Please install MetaMask!");
+            }
+        }
+
+        // Function to start the game
+        function startGame() {
+            console.log("Game started!");
+            document.getElementById('gameContainer').style.display = 'block'; // Show game area
+            spawnKittens(); // Create kittens
+        }
+
+        // Function to spawn kittens
+        function spawnKittens() {
+            const canvas = document.getElementById('gameCanvas');
+            for (let i = 0; i < 5; i++) {
+                const kitten = document.createElement('div');
+                kitten.className = 'kitten';
+                kitten.style.top = Math.random() * (canvas.offsetHeight - 50) + 'px';
+                kitten.style.left = Math.random() * (canvas.offsetWidth - 50) + 'px';
+                canvas.appendChild(kitten);
+            }
+        }
+
+        // Function to play music
+        function playMusic() {
+            const music = document.getElementById('backgroundMusic');
+            music.play().catch((error) => {
+                console.error("Music playback failed: ", error);
+            });
+            isMusicPlaying = true; // Update music status
+        }
+
+        // Function to pause music
+        function pauseMusic() {
+            const music = document.getElementById('backgroundMusic');
+            music.pause();
+            isMusicPlaying = false; // Update music status
+        }
+
+        // Click event for start game button
+        document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
+        document.getElementById('startGameBtn').addEventListener('click', startGame); // Event for start game button
+        document.getElementById('playMusicBtn').addEventListener('click', playMusic); // Event for play music button
+        document.getElementById('pauseMusicBtn').addEventListener('click', pauseMusic); // Event for pause music button
+    </script>
     <script src="wallet.js"></script>
     <script src="script.js"></script>
 </body>
