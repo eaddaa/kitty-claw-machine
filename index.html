@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KITTYVERSE GAME</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Dış stil dosyası -->
+</head>
+<body>
+    <div id="welcomeMessage">Welcome to the Kittyverse Game!</div>
+    <div id="gameContainer" style="display: none;">
+        <h1>KITTYVERSE GAME</h1>
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <div id="scoreboard">Score: 0</div>
+        <div id="timeLeft">Time Left: 60s</div>
+        <button id="claimRewardsBtn">Claim Rewards</button>
+    </div>
+
+    <button id="connectWalletBtn">Connect Wallet</button>
+    <audio id="backgroundMusic" loop>
+        <source src="music/music.mp3" type="audio/mpeg">
+        Your browser does not support the audio tag.
+    </audio>
+
+    <script src="script.js"></script> <!-- Dış JavaScript dosyası -->
+</body>
+</html>

@@ -1,33 +1,44 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+    background-image: url('images/background.jpg'); /* Arka plan görseli */
+    background-size: cover; /* Arka plan görselinin boyutunu ayarla */
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     height: 100vh;
     margin: 0;
 }
 
-.container {
-    text-align: center;
-    border: 2px solid #000;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.game-title {
+#welcomeMessage {
     font-size: 24px;
-    margin-bottom: 20px;
+    color: white; /* Yazı rengi */
+    text-align: center;
 }
 
-#gameCanvas {
-    width: 400px;  /* Adjust the width of the game area */
-    height: 400px; /* Adjust the height of the game area */
-    border: 2px solid #000;
-    margin: 20px auto;
+#gameContainer {
+    background-color: #40e0d0; /* Turkuaz rengi */
+    border-radius: 15px; /* Yuvarlatılmış köşeler */
+    padding: 20px; /* İç boşluk */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Gölge efekti */
+    text-align: center; /* Metni ortalamak için */
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+}
+
+h1 {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Yazı gölgesi */
+    color: #fff; /* Yazı rengi */
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
