@@ -1,4 +1,6 @@
-// HTML Elemanları
+// script.js
+
+// HTML Elements
 const connectWalletBtn = document.getElementById('connectWalletBtn');
 const claimRewardsBtn = document.getElementById('claimRewardsBtn');
 const welcomeMessage = document.getElementById('welcomeMessage');
@@ -6,61 +8,54 @@ const gameCanvas = document.getElementById('gameCanvas');
 const scoreboard = document.getElementById('scoreboard');
 const gameContainer = document.getElementById('gameContainer');
 const timeLeftDisplay = document.getElementById('timeLeft');
-const backgroundMusic = document.getElementById('backgroundMusic');
 
 let score = 0;
 let timeLeft = 60;
 let gameInterval;
 let kittenInterval;
 
-// Müzik çalma
-backgroundMusic.play();
-
-// Cüzdan bağlantısı için buton tıklama olayı
+// Click event for the wallet connection button
 connectWalletBtn.addEventListener('click', async () => {
-    const connected = await connectWallet(); // Cüzdanı bağla
+    const connected = await connectWallet(); // Connect the wallet
     if (connected) {
         welcomeMessage.style.display = 'none';
         gameContainer.style.display = 'block';
-        startGame(); // Oyun başlat
+        document.getElementById('startGameBtn').style.display = "block"; // Show button to start the game
     }
 });
 
-// Cüzdan bağlantı fonksiyonu (placeholder)
-async function connectWallet() {
-    // Cüzdan bağlantı mantığı buraya gelecek
-    return true; // Başarıyla bağlandığını simüle et
-}
+// When clicking the start game button
+document.getElementById('startGameBtn').addEventListener('click', startGame);
 
-// Oyun başlatma
+// Game start function
 function startGame() {
-    score = 0; // Skoru sıfırla
-    timeLeft = 60; // Süreyi sıfırla
-    scoreboard.textContent = `Skor: ${score}`; // Skoru göster
-    updateTimer(); // Süre güncelle
-    kittenInterval = setInterval(moveKittens, 1000); // Kedileri her saniye hareket ettir
-    gameInterval = setInterval(updateGame, 1000); // Oyun güncelleme
+    score = 0; // Reset score
+    timeLeft = 60; // Reset time
+    scoreboard.textContent = `Score: ${score}`; // Show score
+    updateTimer(); // Start timer
+    kittenInterval = setInterval(moveKittens, 1000); // Move kittens every second
+    gameInterval = setInterval(updateGame, 1000); // Call updateGame every second
+    document.getElementById('startGameBtn').style.display = "none"; // Hide button after the game starts
 }
 
-// Kedileri hareket ettirme
+// Function to move kittens
 function moveKittens() {
-    const kitten = document.createElement('img');
-    kitten.src = 'images/kitten.png'; // Kedi görseli
-    kitten.style.position = 'absolute';
-    const randomX = Math.random() * (gameCanvas.clientWidth - 50); // Genişliği kullan
-    const randomY = Math.random() * (gameCanvas.clientHeight - 50); // Yüksekliği kullan
+    const kitten = document.createElement('div');
+    kitten.classList.add('kitten');
+    const randomX = Math.random() * (gameCanvas.clientWidth - 50); // Use clientWidth for proper width
+    const randomY = Math.random() * (gameCanvas.clientHeight - 50); // Use clientHeight for proper height
     kitten.style.left = `${randomX}px`;
     kitten.style.top = `${randomY}px`;
     gameCanvas.appendChild(kitten);
 
-    // Kediye tıklama olayı ekle
+    // Add click event for the kitten
     kitten.addEventListener('click', function() {
         score++;
-        scoreboard.textContent = `Skor: ${score}`;
-        gameCanvas.removeChild(kitten); // Kediyi tıklayınca kaldır
+        scoreboard.textContent = `Score: ${score}`;
+        gameCanvas.removeChild(kitten); // Remove the kitten after clicking
     });
 
-    // 5 saniye içinde tıklanmazsa kediyi kaldır
+    // Remove kitten after 5 seconds if not clicked
     setTimeout(() => {
         if (gameCanvas.contains(kitten)) {
             gameCanvas.removeChild(kitten);
@@ -68,54 +63,43 @@ function moveKittens() {
     }, 5000);
 }
 
-// Oyun durumunu güncelle
+// Update game state
 function updateGame() {
     if (timeLeft > 0) {
         timeLeft--;
-        updateTimer(); // Süreyi güncelle
+        updateTimer(); // Update timer
     } else {
         clearInterval(gameInterval);
         clearInterval(kittenInterval);
-        alert("Oyun bitti! Skorunuz: " + score);
+        alert("Game over! Your score: " + score);
         resetGame();
     }
 }
 
-// Süre güncelleme
+// Update timer
 function updateTimer() {
-    timeLeftDisplay.textContent = `Kalan Süre: ${timeLeft}s`;
+    timeLeftDisplay.textContent = `Time Left: ${timeLeft}s`;
 }
 
-// Oyun sıfırlama fonksiyonu
+// Reset game function
 function resetGame() {
     score = 0;
     timeLeft = 60;
-    scoreboard.textContent = `Skor: ${score}`;
+    scoreboard.textContent = `Score: ${score}`;
     updateTimer();
-    welcomeMessage.style.display = 'block'; // Hoş geldin mesajını göster
-    gameContainer.style.display = 'none'; // Oyun alanını gizle
+    welcomeMessage.style.display = 'block'; // Show welcome message again
+    gameContainer.style.display = 'none'; // Hide game area
 }
 
-// Ödül alma fonksiyonu
+// Reward claiming function
 claimRewardsBtn.addEventListener("click", function() {
-    const userAccount = getUserAccount(); // Cüzdan bilgilerini al
+    const userAccount = getUserAccount(); // Get wallet info
     if (!userAccount) {
-        alert("Önce cüzdanınızı bağlayın.");
+        alert("Please connect your wallet first.");
     } else {
-        claimRewards(score); // Mevcut skorla ödül al
-        alert("Ödüller başarıyla alındı! " + score + " KITTY tokeni aldınız."); // Ödül alma işlemi için placeholder
+        const claimedTokens = score; // Claim tokens equal to score
+        alert(`Successfully claimed ${claimedTokens} Kitty Tokens!`); // Notify the user about the claimed tokens
+        // Here you can implement the actual token transfer logic
     }
 });
-
-// Kullanıcı hesabını alma fonksiyonu (placeholder)
-function getUserAccount() {
-    // Kullanıcı hesabını alma mantığı buraya gelecek
-    return true; // Kullanıcı hesabının alındığını simüle et
-}
-
-// Ödülleri alma fonksiyonu (placeholder)
-function claimRewards(score) {
-    // Skora bağlı olarak ödül alma mantığı buraya gelecek
-    console.log(`Alındı ${score} KITTY token.`);
-}
 

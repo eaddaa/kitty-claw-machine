@@ -1,27 +1,106 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KITTYVERSE GAME</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Dış stil dosyası -->
+    <title>Kitten Game</title>
+    <style>
+        /* General style adjustments */
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full screen height */
+            background: url('images/background.jpg') no-repeat center center fixed; /* Background image */
+            background-size: cover; /* Background image sizing */
+            color: #333;
+            flex-direction: column; /* Align elements vertically */
+            transition: background 0.5s; /* Background transition effect */
+        }
+
+        h1 {
+            margin-bottom: 20px; /* Space between title and buttons */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Title shadow */
+            font-size: 36px; /* Title font size */
+            color: #fff; /* Title color */
+        }
+
+        #gameContainer {
+            display: none; /* Hidden initially */
+            text-align: center; /* Center game area content */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+        }
+
+        #gameCanvas {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            border: 1px solid #000;
+            margin: 20px auto; /* Center */
+            background-color: #ffffff; /* Game area white */
+            overflow: hidden;
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
+        }
+
+        .kitten {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-image: url('images/kitten.png'); /* Kitten image */
+            background-size: cover;
+        }
+
+        button {
+            padding: 15px 30px; /* Increased padding for larger buttons */
+            margin: 10px;
+            font-size: 20px; /* Increased font size */
+            font-weight: bold; /* Bold font */
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #00BFFF; /* Bright turquoise color */
+            color: white;
+            transition: background 0.3s; /* Button transition effect */
+        }
+
+        button:hover {
+            background-color: #008CBA; /* Darker color when hovering */
+        }
+
+        #scoreboard, #timeLeft {
+            font-size: 18px; /* Score and time text size */
+            margin: 10px 0;
+            color: #555; /* Text color */
+        }
+    </style>
 </head>
 <body>
-    <div id="appContainer">
-        <div id="welcomeMessage">KİTTYVERSE GAME</div>
-        <div id="gameContainer" style="display: none;">
-            <canvas id="gameCanvas" width="600" height="400"></canvas>
-            <div id="scoreboard">Skor: 0</div>
-            <div id="timeLeft">Kalan Süre: 60s</div>
-            <button id="claimRewardsBtn">Ödülleri Al</button>
-        </div>
-        <button id="connectWalletBtn">Cüzdanı Bağla</button>
+    <h1 id="welcomeMessage">KITTYVERSE GAME</h1> <!-- Updated welcome message -->
+    <div id="gameContainer">
+        <div id="gameCanvas"></div>
+        <div id="scoreboard">Score: 0</div>
+        <div id="timeLeft">Time Left: 60s</div>
+        <button id="claimRewardsBtn">Claim Rewards</button>
+        <button id="startGameBtn" style="display: none;">Start Game</button> <!-- Start game button -->
     </div>
+    <button id="connectWalletBtn">Connect Wallet</button>
+
+    <!-- Adding music -->
     <audio id="backgroundMusic" loop>
         <source src="music/music.mp3" type="audio/mpeg">
-        Tarayıcınız ses etiketini desteklemiyor.
+        Your browser does not support the audio element.
     </audio>
 
-    <script src="script.js"></script> <!-- Dış JavaScript dosyası -->
+    <button id="playMusicBtn">Play Music</button> <!-- Play music button -->
+    <button id="pauseMusicBtn">Pause Music</button> <!-- Pause music button -->
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="wallet.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
