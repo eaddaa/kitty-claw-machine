@@ -1,35 +1,39 @@
 body {
-    font-family: Arial, sans-serif;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
     background-image: url('images/background.jpg'); /* Arka plan görseli */
     background-size: cover; /* Arka plan görselinin boyutunu ayarla */
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
-    margin: 0;
 }
 
-#welcomeMessage {
-    font-size: 24px;
-    color: white; /* Yazı rengi */
-    text-align: center;
-}
-
-#gameContainer {
-    background-color: #40e0d0; /* Turkuaz rengi */
-    border-radius: 15px; /* Yuvarlatılmış köşeler */
-    padding: 20px; /* İç boşluk */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Gölge efekti */
-    text-align: center; /* Metni ortalamak için */
+#appContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: rgba(64, 224, 208, 0.9); /* Turkuaz rengi, hafif saydamlık */
+    border-radius: 15px; /* Yuvarlatılmış köşeler */
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Gölge efekti */
+    text-align: center;
 }
 
-h1 {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Yazı gölgesi */
+#welcomeMessage {
+    font-size: 36px;
     color: #fff; /* Yazı rengi */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Yazı gölgesi */
+    margin-bottom: 20px;
+}
+
+#gameContainer {
+    margin: 20px 0;
+}
+
+#scoreboard, #timeLeft {
+    font-size: 20px;
+    color: #fff;
 }
 
 button {
@@ -41,4 +45,9 @@ button {
     border: none;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #e0e0e0; /* Hover efekti */
 }

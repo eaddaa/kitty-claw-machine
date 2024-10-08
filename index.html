@@ -7,19 +7,19 @@
     <link rel="stylesheet" href="styles.css"> <!-- Dış stil dosyası -->
 </head>
 <body>
-    <div id="welcomeMessage">Welcome to the Kittyverse Game!</div>
-    <div id="gameContainer" style="display: none;">
-        <h1>KITTYVERSE GAME</h1>
-        <canvas id="gameCanvas" width="400" height="400"></canvas>
-        <div id="scoreboard">Score: 0</div>
-        <div id="timeLeft">Time Left: 60s</div>
-        <button id="claimRewardsBtn">Claim Rewards</button>
+    <div id="appContainer">
+        <div id="welcomeMessage">KİTTYVERSE GAME</div>
+        <div id="gameContainer" style="display: none;">
+            <canvas id="gameCanvas" width="600" height="400"></canvas>
+            <div id="scoreboard">Skor: 0</div>
+            <div id="timeLeft">Kalan Süre: 60s</div>
+            <button id="claimRewardsBtn">Ödülleri Al</button>
+        </div>
+        <button id="connectWalletBtn">Cüzdanı Bağla</button>
     </div>
-
-    <button id="connectWalletBtn">Connect Wallet</button>
     <audio id="backgroundMusic" loop>
         <source src="music/music.mp3" type="audio/mpeg">
-        Your browser does not support the audio tag.
+        Tarayıcınız ses etiketini desteklemiyor.
     </audio>
 
     <script src="script.js"></script> <!-- Dış JavaScript dosyası -->
