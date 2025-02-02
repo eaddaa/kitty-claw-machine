@@ -1,93 +1,24 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kitten Game</title>
-    <style>
-        /* General style adjustments */
-        body {
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: url('images/background.jpg') no-repeat center center fixed;
-            background-size: cover;
-            color: #333;
-            flex-direction: column;
-            transition: background 0.5s;
-        }
-        h1 {
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        #gameContainer {
-            display: none;
-            text-align: center;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            background-color: rgba(255, 255, 255, 0.8);
-        }
-        #gameCanvas {
-            position: relative;
-            width: 500px;
-            height: 500px;
-            border: 1px solid #000;
-            margin: 20px auto;
-            background-color: #ffffff;
-            overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        .kitten {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background-image: url('images/kitten.png');
-            background-size: cover;
-        }
-        button {
-            padding: 12px 24px;
-            margin: 10px;
-            font-size: 18px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #00bfff;
-            color: white;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background-color: #0086b3;
-        }
-        #scoreboard, #timeLeft {
-            font-size: 18px;
-            margin: 10px 0;
-            color: #555;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keplr Wallet Integration</title>
+  <script src="https://cdn.jsdelivr.net/npm/@cosmjs/stargate@0.26.0/dist/index.min.js"></script>
+  <script type="module" src="script.js" defer></script>
 </head>
 <body>
-    <h1 id="welcomeMessage">
-        <img src="KITTYVERSE-GAME.png" alt="Kittyverse Game" style="width: 600px; height: auto;">
-    </h1>
-    <div id="gameContainer">
-        <div id="gameCanvas"></div>
-        <div id="scoreboard">Score: 0</div>
-        <div id="timeLeft">Time Left: 60s</div>
-        <button id="claimRewardsBtn">Claim Rewards</button>
-        <button id="startGameBtn">Start Game</button>
-    </div>
+  <div id="welcomeMessage">
+    <p>Welcome! Please connect your wallet.</p>
     <button id="connectWalletBtn">Connect Wallet</button>
-
-    <!-- Load Keplr -->
-    <script src="https://unpkg.com/@keplr-wallet/window@latest"></script>
-
-    <!-- External Scripts -->
-    <script type="module" src="wallet.js"></script>
-    <script type="module" src="script.js"></script>
+  </div>
+  <div id="gameContainer" style="display: none;">
+    <button id="startGameBtn" style="display: none;">Start Game</button>
+    <div id="scoreboard">Score: 0</div>
+    <div id="timeLeft">Time Left: 60s</div>
+    <!-- Game content goes here -->
+    <button id="claimRewardsBtn">Claim Rewards</button>
+  </div>
 </body>
 </html>
-  
