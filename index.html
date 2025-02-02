@@ -54,19 +54,19 @@
         }
 
         button {
-            padding: 10px 20px;
+            padding: 12px 24px; /* Increased button padding */
             margin: 10px;
-            font-size: 16px;
+            font-size: 18px; /* Increased button font size */
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #007BFF; /* Bootstrap blue color */
+            background-color: #00bfff; /* Açık turkuaz rengi */
             color: white;
             transition: background 0.3s; /* Button transition effect */
         }
 
         button:hover {
-            background-color: #0056b3; /* Darker color when hovering */
+            background-color: #0086b3; /* Daha koyu renk hover için */
         }
 
         #scoreboard, #timeLeft {
@@ -77,7 +77,9 @@
     </style>
 </head>
 <body>
-    <h1 id="welcomeMessage">Welcome to the Kitten Game!</h1>
+    <h1 id="welcomeMessage">
+        <img src="KITTYVERSE-GAME.png" alt="Kittyverse Game" style="width: 400px; height: auto;"> <!-- Büyütülmüş Logo -->
+    </h1>
     <div id="gameContainer">
         <div id="gameCanvas"></div>
         <div id="scoreboard">Score: 0</div>
@@ -96,23 +98,16 @@
     <button id="playMusicBtn">Play Music</button> <!-- Play music button -->
     <button id="pauseMusicBtn">Pause Music</button> <!-- Pause music button -->
 
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.6.0/dist/ethers.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script>
         let isMusicPlaying = false; // Track the music status
-        let provider;
-        let signer;
-        
-        // Function to connect wallet using ethers.js
+
+        // Function to connect wallet
         async function connectWallet() {
             if (window.ethereum) {
                 try {
-                    // Request accounts and provider
-                    await ethereum.request({ method: 'eth_requestAccounts' });
-                    provider = new ethers.BrowserProvider(window.ethereum);
-                    signer = await provider.getSigner();
-                    
-                    const account = await signer.getAddress();
-                    document.getElementById('welcomeMessage').innerText = `Connected: ${account}`;
+                    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                    document.getElementById('welcomeMessage').innerText = `Connected: ${accounts[0]}`;
                     document.getElementById('connectWalletBtn').style.display = 'none';
                     document.getElementById('gameContainer').style.display = 'block'; // Show the game after connecting wallet
                 } catch (error) {
