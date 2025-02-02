@@ -1,97 +1,90 @@
-import { connectWallet, claimReward } from "./wallet.js";
+// script.js
 
-// --- HTML Elements ---
-const connectWalletBtn = document.getElementById('connectWalletBtn');
-const claimRewardsBtn = document.getElementById('claimRewardsBtn');
-const welcomeMessage = document.getElementById('welcomeMessage');
-const gameCanvas = document.getElementById('gameCanvas');
-const scoreboard = document.getElementById('scoreboard');
-const gameContainer = document.getElementById('gameContainer');
-const timeLeftDisplay = document.getElementById('timeLeft');
+import { connectWallet, claimReward } from './wallet.js';
 
-let score = 0;
-let timeLeft = 60;
-let gameInterval;
-let kittenInterval;
+let isMusicPlaying = false;
 let userAddress = null;
+let userScore = 0;
+let gameInterval = null;
+let gameDuration = 60; // Game duration in seconds
 
-// --- Game Functions ---
-connectWalletBtn.addEventListener('click', async () => {
-    userAddress = await connectWallet(); // Connect the wallet
-    if (userAddress) {
-        welcomeMessage.style.display = 'none';
-        gameContainer.style.display = 'block';
-        document.getElementById('startGameBtn').style.display = "block";
-    }
+// Event listeners for UI buttons
+document.getElementById('connectWalletBtn').addEventListener('click', async () => {
+  userAddress = await connectWallet();
+  if (userAddress) {
+    document.getElementById('welcomeMessage').innerText = `Connected: ${userAddress}`;
+    document.getElementById('connectWalletBtn').style.display = 'none';
+    document.getElementById('gameContainer').style.display = 'block';
+    // Optionally, show the Start Game button
+    document.getElementById('startGameBtn').style.display = 'block';
+  }
 });
 
 document.getElementById('startGameBtn').addEventListener('click', startGame);
-
-function startGame() {
-    score = 0; // Reset score
-    timeLeft = 60; // Reset time
-    scoreboard.textContent = `Score: ${score}`; // Show score
-    updateTimer(); // Start timer
-    kittenInterval = setInterval(moveKittens, 1000); // Move kittens every second
-    gameInterval = setInterval(updateGame, 1000); // Call updateGame every second
-    document.getElementById('startGameBtn').style.display = "none"; // Hide button after the game starts
-}
-
-function moveKittens() {
-    const kitten = document.createElement('div');
-    kitten.classList.add('kitten');
-    const randomX = Math.random() * (gameCanvas.clientWidth - 50); // Use clientWidth for proper width
-    const randomY = Math.random() * (gameCanvas.clientHeight - 50); // Use clientHeight for proper height
-    kitten.style.left = `${randomX}px`;
-    kitten.style.top = `${randomY}px`;
-    gameCanvas.appendChild(kitten);
-
-    // Add click event for the kitten
-    kitten.addEventListener('click', function () {
-        score++;
-        scoreboard.textContent = `Score: ${score}`;
-        gameCanvas.removeChild(kitten); // Remove the kitten after clicking
-    });
-
-    // Remove kitten after 5 seconds if not clicked
-    setTimeout(() => {
-        if (gameCanvas.contains(kitten)) {
-            gameCanvas.removeChild(kitten);
-        }
-    }, 5000);
-}
-
-function updateGame() {
-    if (timeLeft > 0) {
-        timeLeft--;
-        updateTimer(); // Update timer
-    } else {
-        clearInterval(gameInterval);
-        clearInterval(kittenInterval);
-        alert("Game over! Your score: " + score);
-        resetGame();
-    }
-}
-
-function updateTimer() {
-    timeLeftDisplay.textContent = `Time Left: ${timeLeft}s`;
-}
-
-function resetGame() {
-    score = 0;
-    timeLeft = 60;
-    scoreboard.textContent = `Score: ${score}`;
-    updateTimer();
-    welcomeMessage.style.display = 'block'; // Show welcome message again
-    gameContainer.style.display = 'none'; // Hide game area
-}
-
-// --- Reward Claim Button Event Listener ---
-claimRewardsBtn.addEventListener("click", async () => {
-    if (!userAddress) {
-        alert("Please connect your wallet first.");
-        return;
-    }
-
-    await claimReward(userAddress, score);
+document.getElementById('playMusicBtn').addEventListener('click', playMusic);
+document.getElementById('pauseMusicBtn').addEventListener('click', pauseMusic);
+document.getElementById('claimRewardsBtn').addEventListener('click', async () => {
+  await claimReward(userAddress, userScore);
 });
+
+// Function to start the game
+function startGame() {
+  userScore = 0;
+  gameDuration = 60;
+  document.getElementById('scoreboard').innerText = `Score: ${userScore}`;
+  document.getElementById('timeLeft').innerText = `Time Left: ${gameDuration}s`;
+  spawnKittens();
+  gameInterval = setInterval(updateGame, 1000);
+  document.getElementById('startGameBtn').style.display = 'none';
+}
+
+// Function to update game timer and check end conditions
+function updateGame() {
+  gameDuration--;
+  document.getElementById('timeLeft').innerText = `Time Left: ${gameDuration}s`;
+  if (gameDuration <= 0) {
+    clearInterval(gameInterval);
+    alert(`Game Over! Your score: ${userScore}`);
+    // Show the claim rewards button if score threshold is met
+    if (userScore >= 1000) {
+      document.getElementById('claimRewardsBtn').style.display = 'block';
+    }
+  }
+}
+
+// Function to spawn kittens on the canvas
+function spawnKittens() {
+  const canvas = document.getElementById('gameCanvas');
+  // Clear any existing kittens
+  canvas.innerHTML = '';
+  // Spawn 5 kittens
+  for (let i = 0; i < 5; i++) {
+    const kitten = document.createElement('div');
+    kitten.className = 'kitten';
+    kitten.style.top = Math.random() * (canvas.offsetHeight - 50) + 'px';
+    kitten.style.left = Math.random() * (canvas.offsetWidth - 50) + 'px';
+    // On click, increase score and remove the kitten
+    kitten.addEventListener('click', () => {
+      userScore += 100; // Each kitten gives 100 points
+      document.getElementById('scoreboard').innerText = `Score: ${userScore}`;
+      kitten.remove();
+    });
+    canvas.appendChild(kitten);
+  }
+}
+
+// Function to play background music
+function playMusic() {
+  const music = document.getElementById('backgroundMusic');
+  music.play().catch((error) => {
+    console.error("Music playback failed:", error);
+  });
+  isMusicPlaying = true;
+}
+
+// Function to pause background music
+function pauseMusic() {
+  const music = document.getElementById('backgroundMusic');
+  music.pause();
+  isMusicPlaying = false;
+}
