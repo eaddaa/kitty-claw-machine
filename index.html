@@ -11,205 +11,82 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh; /* Full screen height */
-            background: url('images/background.jpg') no-repeat center center fixed; /* Background image */
-            background-size: cover; /* Background image sizing */
+            height: 100vh;
+            background: url('images/background.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: #333;
-            flex-direction: column; /* Align elements vertically */
-            transition: background 0.5s; /* Background transition effect */
+            flex-direction: column;
+            transition: background 0.5s;
         }
-
         h1 {
-            margin-bottom: 20px; /* Space between title and buttons */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Title shadow */
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
-
         #gameContainer {
-            display: none; /* Hidden initially */
-            text-align: center; /* Center game area content */
+            display: none;
+            text-align: center;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 255, 255, 0.8);
         }
-
         #gameCanvas {
             position: relative;
             width: 500px;
             height: 500px;
             border: 1px solid #000;
-            margin: 20px auto; /* Center */
-            background-color: #ffffff; /* Game area white */
+            margin: 20px auto;
+            background-color: #ffffff;
             overflow: hidden;
-            border-radius: 10px; /* Rounded corners */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-
         .kitten {
             position: absolute;
             width: 50px;
             height: 50px;
-            background-image: url('images/kitten.png'); /* Kitten image */
+            background-image: url('images/kitten.png');
             background-size: cover;
         }
-
         button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             margin: 10px;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #007BFF; /* Bootstrap blue color */
+            background-color: #00bfff;
             color: white;
-            transition: background 0.3s; /* Button transition effect */
+            transition: background 0.3s;
         }
-
         button:hover {
-            background-color: #0056b3; /* Darker color when hovering */
+            background-color: #0086b3;
         }
-
         #scoreboard, #timeLeft {
-            font-size: 18px; /* Score and time text size */
+            font-size: 18px;
             margin: 10px 0;
-            color: #555; /* Text color */
+            color: #555;
         }
     </style>
 </head>
 <body>
-    <h1 id="welcomeMessage">Welcome to the Kitten Game!</h1>
+    <h1 id="welcomeMessage">
+        <img src="KITTYVERSE-GAME.png" alt="Kittyverse Game" style="width: 600px; height: auto;">
+    </h1>
     <div id="gameContainer">
         <div id="gameCanvas"></div>
         <div id="scoreboard">Score: 0</div>
         <div id="timeLeft">Time Left: 60s</div>
         <button id="claimRewardsBtn">Claim Rewards</button>
-        <button id="startGameBtn">Start Game</button> <!-- Start game button -->
+        <button id="startGameBtn">Start Game</button>
     </div>
     <button id="connectWalletBtn">Connect Wallet</button>
 
-    <!-- Adding music -->
-    <audio id="backgroundMusic" loop>
-        <source src="music/music.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+    <!-- Load Keplr -->
+    <script src="https://unpkg.com/@keplr-wallet/window@latest"></script>
 
-    <button id="playMusicBtn">Play Music</button> <!-- Play music button -->
-    <button id="pauseMusicBtn">Pause Music</button> <!-- Pause music button -->
-
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-    <script>
-        // --- Game Variables ---
-        let score = 0;
-        let timeLeft = 60;
-        let gameInterval;
-        let kittenInterval;
-
-        // --- Wallet Connection Function ---
-        async function connectWallet() {
-            if (!window.keplr) {
-                alert("Please install Keplr wallet.");
-                return null;
-            }
-
-            try {
-                await window.keplr.enable("dymension_1100-1"); // Dymension chain ID
-                const accounts = await window.keplr.getAccounts("dymension_1100-1");
-                const userAddress = accounts[0].address;
-                document.getElementById('welcomeMessage').innerText = `Connected: ${userAddress}`;
-                document.getElementById('connectWalletBtn').style.display = 'none';
-                document.getElementById('gameContainer').style.display = 'block'; // Show game area
-                return userAddress;
-            } catch (error) {
-                console.error("Failed to connect wallet:", error);
-                alert("Failed to connect wallet.");
-                return null;
-            }
-        }
-
-        // --- Start Game Function ---
-        function startGame() {
-            score = 0;
-            timeLeft = 60;
-            document.getElementById('scoreboard').textContent = `Score: ${score}`;
-            updateTimer();
-            kittenInterval = setInterval(moveKittens, 1000);
-            gameInterval = setInterval(updateGame, 1000);
-            document.getElementById('startGameBtn').style.display = "none"; // Hide start button
-        }
-
-        // --- Move Kittens Function ---
-        function moveKittens() {
-            const kitten = document.createElement('div');
-            kitten.classList.add('kitten');
-            const randomX = Math.random() * (gameCanvas.clientWidth - 50);
-            const randomY = Math.random() * (gameCanvas.clientHeight - 50);
-            kitten.style.left = `${randomX}px`;
-            kitten.style.top = `${randomY}px`;
-            gameCanvas.appendChild(kitten);
-
-            kitten.addEventListener('click', function () {
-                score++;
-                document.getElementById('scoreboard').textContent = `Score: ${score}`;
-                gameCanvas.removeChild(kitten);
-                if (score >= 1000) {
-                    document.getElementById('claimRewardsBtn').style.display = "block"; // Show claim button
-                }
-            });
-
-            setTimeout(() => {
-                if (gameCanvas.contains(kitten)) {
-                    gameCanvas.removeChild(kitten);
-                }
-            }, 5000);
-        }
-
-        // --- Update Game Function ---
-        function updateGame() {
-            if (timeLeft > 0) {
-                timeLeft--;
-                updateTimer();
-            } else {
-                clearInterval(gameInterval);
-                clearInterval(kittenInterval);
-                alert("Game over! Your score: " + score);
-                resetGame();
-            }
-        }
-
-        // --- Update Timer Function ---
-        function updateTimer() {
-            document.getElementById('timeLeft').textContent = `Time Left: ${timeLeft}s`;
-        }
-
-        // --- Reset Game Function ---
-        function resetGame() {
-            score = 0;
-            timeLeft = 60;
-            document.getElementById('scoreboard').textContent = `Score: ${score}`;
-            updateTimer();
-            document.getElementById('welcomeMessage').style.display = 'block';
-            document.getElementById('gameContainer').style.display = 'none';
-            document.getElementById('claimRewardsBtn').style.display = "none";
-            document.getElementById('startGameBtn').style.display = "block"; // Show start button again
-        }
-
-        // --- Claim Reward Function ---
-        async function claimReward() {
-            const userAddress = await connectWallet();
-            if (!userAddress || score < 1000) {
-                alert("Please connect your wallet and reach 1000 points to claim rewards.");
-                return;
-            }
-
-            alert(`Successfully claimed 100 KITTY Tokens!`); // Placeholder for actual token transfer
-        }
-
-        // --- Event Listeners ---
-        document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
-        document.getElementById('startGameBtn').addEventListener('click', startGame);
-        document.getElementById('claimRewardsBtn').addEventListener('click', claimReward);
-        document.getElementById('playMusicBtn').addEventListener('click', () => document.getElementById('backgroundMusic').play());
-        document.getElementById('pauseMusicBtn').addEventListener('click', () => document.getElementById('backgroundMusic').pause());
-    </script>
+    <!-- External Scripts -->
+    <script type="module" src="wallet.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
