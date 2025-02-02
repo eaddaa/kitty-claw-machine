@@ -1,3 +1,5 @@
+// script.js
+
 import { connectWallet, claimReward } from "./wallet.js";
 
 // --- HTML Elements ---
@@ -60,38 +62,3 @@ function moveKittens() {
         }
     }, 5000);
 }
-
-function updateGame() {
-    if (timeLeft > 0) {
-        timeLeft--;
-        updateTimer(); // Update timer
-    } else {
-        clearInterval(gameInterval);
-        clearInterval(kittenInterval);
-        alert("Game over! Your score: " + score);
-        resetGame();
-    }
-}
-
-function updateTimer() {
-    timeLeftDisplay.textContent = `Time Left: ${timeLeft}s`;
-}
-
-function resetGame() {
-    score = 0;
-    timeLeft = 60;
-    scoreboard.textContent = `Score: ${score}`;
-    updateTimer();
-    welcomeMessage.style.display = 'block'; // Show welcome message again
-    gameContainer.style.display = 'none'; // Hide game area
-}
-
-// --- Reward Claim Button Event Listener ---
-claimRewardsBtn.addEventListener("click", async () => {
-    if (!userAddress) {
-        alert("Please connect your wallet first.");
-        return;
-    }
-
-    await claimReward(userAddress, score);
-});
