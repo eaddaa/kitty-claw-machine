@@ -14,8 +14,9 @@ let kittenInterval;
 
 // --- Blockchain Integration Variables ---
 const adminAddress = "kitty194tqyp4kk7pmrjhnf0dfzz72dqlvtuglh8exxt"; // Admin address
-const chainId = "kittyverse_595973-1"; //  Dymension Mainnet
-const rpcEndpoint = "https://dymrollapp-rpc.kittyverse.click"; // RPC Endpoint
+const chainId = "dymension_1100-1"; //  Dymension Mainnet
+const rpcEndpoint = "https://dymension-mainnet.public.blastapi.io"; // RPC Endpoint
+const restEndpoint = "https://dymension-mainnet-rest.public.blastapi.io"; // REST Endpoint
 
 // --- Wallet Connection Function ---
 async function connectWallet() {
@@ -25,12 +26,12 @@ async function connectWallet() {
     }
 
     try {
-        // Enable Keplr for the specified chain
+        // Suggest the chain to Keplr
         await window.keplr.experimentalSuggestChain({
-            chainId: "kittyverse_595973-1",
+            chainId: "dymension_1100-1",
             chainName: "Dymension Mainnet",
-            rpc: "https://dymrollapp-rpc.kittyverse.click",
-            rest: "https://dymrollapp-rest.kittyverse.click",
+            rpc: rpcEndpoint,
+            rest: restEndpoint,
             bip44: {
                 coinType: 118,
             },
@@ -67,7 +68,8 @@ async function connectWallet() {
             features: ["stargate", "ibc-transfer"],
         });
 
-        // Get accounts
+        // Enable the chain and get accounts
+        await window.keplr.enable(chainId);
         const accounts = await window.keplr.getAccounts(chainId);
         const userAddress = accounts[0].address;
 
@@ -75,7 +77,7 @@ async function connectWallet() {
         return userAddress;
     } catch (error) {
         console.error("Failed to connect wallet:", error);
-        alert("Failed to connect wallet.");
+        alert("Failed to connect wallet. Please check your Keplr settings.");
         return null;
     }
 }
@@ -131,8 +133,10 @@ async function claimReward(userAddress) {
     };
 
     try {
+        // Sign the transaction
         const signedTx = await window.keplr.signAmino(chainId, adminAddress, tx);
 
+        // Broadcast the transaction
         const response = await fetch(rpcEndpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
