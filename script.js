@@ -14,8 +14,8 @@ let kittenInterval;
 
 // --- Blockchain Integration Variables ---
 const adminAddress = "kitty194tqyp4kk7pmrjhnf0dfzz72dqlvtuglh8exxt"; // Admin address
-const chainId = "dymension_1100-1"; //  Dymension Mainnet
-const rpcEndpoint = "https://dymension-mainnet.public.blastapi.io"; // RPC Endpoint
+const chainId = "kittyverse_595973-1"; //  Dymension Mainnet
+const rpcEndpoint = "https://dymrollapp-rpc.kittyverse.click"; // RPC Endpoint
 
 // --- Wallet Connection Function ---
 async function connectWallet() {
@@ -27,10 +27,10 @@ async function connectWallet() {
     try {
         // Enable Keplr for the specified chain
         await window.keplr.experimentalSuggestChain({
-            chainId: "dymension_1100-1",
+            chainId: "kittyverse_595973-1",
             chainName: "Dymension Mainnet",
-            rpc: "https://dymension-mainnet.public.blastapi.io",
-            rest: "https://dymension-mainnet-rest.public.blastapi.io",
+            rpc: "https://dymrollapp-rpc.kittyverse.click",
+            rest: "https://dymrollapp-rest.kittyverse.click",
             bip44: {
                 coinType: 118,
             },
