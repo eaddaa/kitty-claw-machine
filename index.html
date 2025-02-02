@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kitten Game</title>
     <style>
-        /* General style adjustments */
+        /* Genel stil ayarları */
         body {
             font-family: 'Arial', sans-serif;
             display: flex;
@@ -18,10 +18,12 @@
             flex-direction: column;
             transition: background 0.5s;
         }
+
         h1 {
             margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
+
         #gameContainer {
             display: none;
             text-align: center;
@@ -30,6 +32,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             background-color: rgba(255, 255, 255, 0.8);
         }
+
         #gameCanvas {
             position: relative;
             width: 500px;
@@ -41,6 +44,7 @@
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
+
         .kitten {
             position: absolute;
             width: 50px;
@@ -48,20 +52,23 @@
             background-image: url('images/kitten.png');
             background-size: cover;
         }
+
         button {
-            padding: 12px 24px;
+            padding: 10px 20px;
             margin: 10px;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #00bfff;
+            background-color: #007BFF;
             color: white;
             transition: background 0.3s;
         }
+
         button:hover {
-            background-color: #0086b3;
+            background-color: #0056b3;
         }
+
         #scoreboard, #timeLeft {
             font-size: 18px;
             margin: 10px 0;
@@ -70,23 +77,26 @@
     </style>
 </head>
 <body>
-    <h1 id="welcomeMessage">
-        <img src="KITTYVERSE-GAME.png" alt="Kittyverse Game" style="width: 600px; height: auto;">
-    </h1>
+    <h1 id="welcomeMessage">Kitten Game'e Hoş Geldiniz!</h1>
     <div id="gameContainer">
         <div id="gameCanvas"></div>
-        <div id="scoreboard">Score: 0</div>
-        <div id="timeLeft">Time Left: 60s</div>
-        <button id="claimRewardsBtn">Claim Rewards</button>
-        <button id="startGameBtn">Start Game</button>
+        <div id="scoreboard">Puan: 0</div>
+        <div id="timeLeft">Kalan Süre: 60s</div>
+        <button id="claimRewardsBtn">Ödülleri Al</button>
+        <button id="startGameBtn">Oyunu Başlat</button>
     </div>
-    <button id="connectWalletBtn">Connect Wallet</button>
+    <button id="connectWalletBtn">Cüzdanı Bağla</button>
 
-    <!-- Load Keplr -->
-    <script src="https://unpkg.com/@keplr-wallet/window@latest"></script>
+    <audio id="backgroundMusic" loop>
+        <source src="music/music.mp3" type="audio/mpeg">
+        Tarayıcınız ses öğesini desteklemiyor.
+    </audio>
 
-    <!-- External Scripts -->
-    <script type="module" src="wallet.js"></script>
-    <script type="module" src="script.js"></script>
+    <button id="playMusicBtn">Müziği Çal</button>
+    <button id="pauseMusicBtn">Müziği Durdur</button>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="wallet.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
