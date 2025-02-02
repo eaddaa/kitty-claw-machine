@@ -1,36 +1,36 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kitten Game</title>
     <style>
-        /* Genel stil ayarları */
+        /* General style adjustments */
         body {
             font-family: 'Arial', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background: url('images/background.jpg') no-repeat center center fixed;
-            background-size: cover;
+            height: 100vh; /* Full screen height */
+            background: url('images/background.jpg') no-repeat center center fixed; /* Background image */
+            background-size: cover; /* Background image sizing */
             color: #333;
-            flex-direction: column;
-            transition: background 0.5s;
+            flex-direction: column; /* Align elements vertically */
+            transition: background 0.5s; /* Background transition effect */
         }
 
         h1 {
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px; /* Space between title and buttons */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Title shadow */
         }
 
         #gameContainer {
-            display: none;
-            text-align: center;
+            display: none; /* Hidden initially */
+            text-align: center; /* Center game area content */
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            background-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
         }
 
         #gameCanvas {
@@ -38,18 +38,18 @@
             width: 500px;
             height: 500px;
             border: 1px solid #000;
-            margin: 20px auto;
-            background-color: #ffffff;
+            margin: 20px auto; /* Center */
+            background-color: #ffffff; /* Game area white */
             overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
         }
 
         .kitten {
             position: absolute;
             width: 50px;
             height: 50px;
-            background-image: url('images/kitten.png');
+            background-image: url('images/kitten.png'); /* Kitten image */
             background-size: cover;
         }
 
@@ -60,42 +60,110 @@
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #007BFF;
+            background-color: #007BFF; /* Bootstrap blue color */
             color: white;
-            transition: background 0.3s;
+            transition: background 0.3s; /* Button transition effect */
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #0056b3; /* Darker color when hovering */
         }
 
         #scoreboard, #timeLeft {
-            font-size: 18px;
+            font-size: 18px; /* Score and time text size */
             margin: 10px 0;
-            color: #555;
+            color: #555; /* Text color */
         }
     </style>
 </head>
 <body>
-    <h1 id="welcomeMessage">Kitten Game'e Hoş Geldiniz!</h1>
+    <h1 id="welcomeMessage">Welcome to the Kitten Game!</h1>
     <div id="gameContainer">
         <div id="gameCanvas"></div>
-        <div id="scoreboard">Puan: 0</div>
-        <div id="timeLeft">Kalan Süre: 60s</div>
-        <button id="claimRewardsBtn">Ödülleri Al</button>
-        <button id="startGameBtn">Oyunu Başlat</button>
+        <div id="scoreboard">Score: 0</div>
+        <div id="timeLeft">Time Left: 60s</div>
+        <button id="claimRewardsBtn">Claim Rewards</button>
+        <button id="startGameBtn">Start Game</button> <!-- Start game button -->
     </div>
-    <button id="connectWalletBtn">Cüzdanı Bağla</button>
+    <button id="connectWalletBtn">Connect Wallet</button>
 
+    <!-- Adding music -->
     <audio id="backgroundMusic" loop>
         <source src="music/music.mp3" type="audio/mpeg">
-        Tarayıcınız ses öğesini desteklemiyor.
+        Your browser does not support the audio element.
     </audio>
 
-    <button id="playMusicBtn">Müziği Çal</button>
-    <button id="pauseMusicBtn">Müziği Durdur</button>
+    <button id="playMusicBtn">Play Music</button> <!-- Play music button -->
+    <button id="pauseMusicBtn">Pause Music</button> <!-- Pause music button -->
 
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.6.0/dist/ethers.umd.min.js"></script>
+    <script>
+        let isMusicPlaying = false; // Track the music status
+        let provider;
+        let signer;
+        
+        // Function to connect wallet using ethers.js
+        async function connectWallet() {
+            if (window.ethereum) {
+                try {
+                    // Request accounts and provider
+                    await ethereum.request({ method: 'eth_requestAccounts' });
+                    provider = new ethers.BrowserProvider(window.ethereum);
+                    signer = await provider.getSigner();
+                    
+                    const account = await signer.getAddress();
+                    document.getElementById('welcomeMessage').innerText = `Connected: ${account}`;
+                    document.getElementById('connectWalletBtn').style.display = 'none';
+                    document.getElementById('gameContainer').style.display = 'block'; // Show the game after connecting wallet
+                } catch (error) {
+                    console.error("Wallet connection failed: ", error);
+                }
+            } else {
+                alert("Please install MetaMask!");
+            }
+        }
+
+        // Function to start the game
+        function startGame() {
+            console.log("Game started!");
+            document.getElementById('gameContainer').style.display = 'block'; // Show game area
+            spawnKittens(); // Create kittens
+        }
+
+        // Function to spawn kittens
+        function spawnKittens() {
+            const canvas = document.getElementById('gameCanvas');
+            for (let i = 0; i < 5; i++) {
+                const kitten = document.createElement('div');
+                kitten.className = 'kitten';
+                kitten.style.top = Math.random() * (canvas.offsetHeight - 50) + 'px';
+                kitten.style.left = Math.random() * (canvas.offsetWidth - 50) + 'px';
+                canvas.appendChild(kitten);
+            }
+        }
+
+        // Function to play music
+        function playMusic() {
+            const music = document.getElementById('backgroundMusic');
+            music.play().catch((error) => {
+                console.error("Music playback failed: ", error);
+            });
+            isMusicPlaying = true; // Update music status
+        }
+
+        // Function to pause music
+        function pauseMusic() {
+            const music = document.getElementById('backgroundMusic');
+            music.pause();
+            isMusicPlaying = false; // Update music status
+        }
+
+        // Click event for start game button
+        document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
+        document.getElementById('startGameBtn').addEventListener('click', startGame); // Event for start game button
+        document.getElementById('playMusicBtn').addEventListener('click', playMusic); // Event for play music button
+        document.getElementById('pauseMusicBtn').addEventListener('click', pauseMusic); // Event for pause music button
+    </script>
     <script src="wallet.js"></script>
     <script src="script.js"></script>
 </body>
