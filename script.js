@@ -1,105 +1,61 @@
-// script.js
-
-// HTML Elements
-const connectWalletBtn = document.getElementById('connectWalletBtn');
-const claimRewardsBtn = document.getElementById('claimRewardsBtn');
-const welcomeMessage = document.getElementById('welcomeMessage');
-const gameCanvas = document.getElementById('gameCanvas');
-const scoreboard = document.getElementById('scoreboard');
-const gameContainer = document.getElementById('gameContainer');
-const timeLeftDisplay = document.getElementById('timeLeft');
-
 let score = 0;
 let timeLeft = 60;
-let gameInterval;
-let kittenInterval;
+const scoreboard = document.getElementById('scoreboard');
+const timerDisplay = document.getElementById('timer');
+const contractAddress = "0xYourContractAddress";  // Akıllı sözleşme adresini buraya ekle
+const contractABI = [ /* Buraya ABI ekleyin */ ];
 
-// Click event for the wallet connection button
-connectWalletBtn.addEventListener('click', async () => {
-    const connected = await connectWallet(); // Connect the wallet
-    if (connected) {
-        welcomeMessage.style.display = 'none';
-        gameContainer.style.display = 'block';
-        document.getElementById('startGameBtn').style.display = "block"; // Show button to start the game
-    }
-});
-
-// When clicking the start game button
-document.getElementById('startGameBtn').addEventListener('click', startGame);
-
-// Game start function
-function startGame() {
-    score = 0; // Reset score
-    timeLeft = 60; // Reset time
-    scoreboard.textContent = `Score: ${score}`; // Show score
-    updateTimer(); // Start timer
-    kittenInterval = setInterval(moveKittens, 1000); // Move kittens every second
-    gameInterval = setInterval(updateGame, 1000); // Call updateGame every second
-    document.getElementById('startGameBtn').style.display = "none"; // Hide button after the game starts
-}
-
-// Function to move kittens
-function moveKittens() {
-    const kitten = document.createElement('div');
-    kitten.classList.add('kitten');
-    const randomX = Math.random() * (gameCanvas.clientWidth - 50); // Use clientWidth for proper width
-    const randomY = Math.random() * (gameCanvas.clientHeight - 50); // Use clientHeight for proper height
-    kitten.style.left = `${randomX}px`;
-    kitten.style.top = `${randomY}px`;
-    gameCanvas.appendChild(kitten);
-
-    // Add click event for the kitten
-    kitten.addEventListener('click', function() {
-        score++;
-        scoreboard.textContent = `Score: ${score}`;
-        gameCanvas.removeChild(kitten); // Remove the kitten after clicking
-    });
-
-    // Remove kitten after 5 seconds if not clicked
-    setTimeout(() => {
-        if (gameCanvas.contains(kitten)) {
-            gameCanvas.removeChild(kitten);
+async function connectWallet() {
+    if (window.ethereum) {
+        try {
+            const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+            return accounts[0];
+        } catch (error) {
+            console.error("Error connecting wallet:", error);
         }
-    }, 5000);
-}
-
-// Update game state
-function updateGame() {
-    if (timeLeft > 0) {
-        timeLeft--;
-        updateTimer(); // Update timer
     } else {
-        clearInterval(gameInterval);
-        clearInterval(kittenInterval);
-        alert("Game over! Your score: " + score);
-        resetGame();
+        alert("Please install MetaMask.");
     }
 }
 
-// Update timer
-function updateTimer() {
-    timeLeftDisplay.textContent = `Time Left: ${timeLeft}s`;
-}
-
-// Reset game function
-function resetGame() {
+async function startGame() {
+    const userAccount = await connectWallet();
+    if (!userAccount) {
+        alert("Connect wallet first!");
+        return;
+    }
     score = 0;
     timeLeft = 60;
     scoreboard.textContent = `Score: ${score}`;
     updateTimer();
-    welcomeMessage.style.display = 'block'; // Show welcome message again
-    gameContainer.style.display = 'none'; // Hide game area
 }
 
-// Reward claiming function
-claimRewardsBtn.addEventListener("click", function() {
-    const userAccount = getUserAccount(); // Get wallet info
-    if (!userAccount) {
-        alert("Please connect your wallet first.");
+async function claimTokens(score, userAccount) {
+    if (!window.ethereum) {
+        alert("Please install MetaMask.");
+        return;
+    }
+
+    const web3 = new Web3(window.ethereum);
+    const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+    try {
+        await contract.methods.claimRewards(score).send({ from: userAccount });
+        alert(`You claimed ${score} KITTY Tokens!`);
+    } catch (error) {
+        console.error("Error claiming rewards:", error);
+        alert("Transaction failed.");
+    }
+}
+
+document.getElementById("connectWalletBtn").addEventListener("click", connectWallet);
+document.getElementById("startGameBtn").addEventListener("click", startGame);
+document.getElementById("claimRewardsBtn").addEventListener("click", async function() {
+    const userAccount = await connectWallet();
+    if (score > 0) {
+        await claimTokens(score, userAccount);
     } else {
-        const claimedTokens = score; // Claim tokens equal to score
-        alert(`Successfully claimed ${claimedTokens} Kitty Tokens!`); // Notify the user about the claimed tokens
-        // Here you can implement the actual token transfer logic
+        alert("Score must be greater than 0!");
     }
 });
 
