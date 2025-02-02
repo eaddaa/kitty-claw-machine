@@ -2,7 +2,7 @@
 
 import { connectWallet, claimReward } from './wallet.js';
 
-// --- HTML Elements ---
+// HTML Elemanları
 const connectWalletBtn = document.getElementById('connectWalletBtn');
 const claimRewardsBtn = document.getElementById('claimRewardsBtn');
 const welcomeMessage = document.getElementById('welcomeMessage');
@@ -17,7 +17,7 @@ let gameInterval;
 let kittenInterval;
 let userAddress = null;
 
-// --- Event Listeners ---
+// Olay Dinleyicileri
 connectWalletBtn.addEventListener('click', async () => {
   userAddress = await connectWallet();
   if (userAddress) {
@@ -31,17 +31,17 @@ startGameBtn.addEventListener('click', startGame);
 
 claimRewardsBtn.addEventListener('click', async () => {
   if (!userAddress) {
-    alert('Please connect your wallet first.');
+    alert('Lütfen önce cüzdanınızı bağlayın.');
     return;
   }
   await claimReward(userAddress, score);
 });
 
-// --- Game Functions ---
+// Oyun Fonksiyonları
 function startGame() {
   score = 0;
   timeLeft = 60;
-  scoreboard.textContent = `Score: ${score}`;
+  scoreboard.textContent = `Puan: ${score}`;
   updateTimer();
   kittenInterval = setInterval(moveKittens, 1000);
   gameInterval = setInterval(updateGame, 1000);
@@ -49,20 +49,20 @@ function startGame() {
 }
 
 function moveKittens() {
-  // Implement kitten movement logic here
+  // Kedilerin hareket etme mantığını buraya ekleyin
 }
 
 function updateGame() {
-  // Implement game update logic here
+  // Oyun güncelleme mantığını buraya ekleyin
 }
 
 function updateTimer() {
-  timeLeftDisplay.textContent = `Time Left: ${timeLeft}s`;
+  timeLeftDisplay.textContent = `Kalan Süre: ${timeLeft}s`;
   if (timeLeft > 0) {
     timeLeft--;
   } else {
     clearInterval(gameInterval);
     clearInterval(kittenInterval);
-    alert('Game Over!');
+    alert('Oyun Bitti!');
   }
 }
