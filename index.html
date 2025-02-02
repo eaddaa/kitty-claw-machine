@@ -11,184 +11,83 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh; /* Full screen height */
-            background: url('images/background.jpg') no-repeat center center fixed; /* Background image */
-            background-size: cover; /* Background image sizing */
+            height: 100vh;
+            background: url('images/background.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: #333;
-            flex-direction: column; /* Align elements vertically */
-            transition: background 0.5s; /* Background transition effect */
+            flex-direction: column;
+            transition: background 0.5s;
         }
         h1 {
-            margin-bottom: 20px; /* Space between title and buttons */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Title shadow */
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         #gameContainer {
-            display: none; /* Hidden initially */
-            text-align: center; /* Center game area content */
+            display: none;
+            text-align: center;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 255, 255, 0.8);
         }
         #gameCanvas {
             position: relative;
             width: 500px;
             height: 500px;
             border: 1px solid #000;
-            margin: 20px auto; /* Center */
-            background-color: #ffffff; /* Game area white */
+            margin: 20px auto;
+            background-color: #ffffff;
             overflow: hidden;
-            border-radius: 10px; /* Rounded corners */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         .kitten {
             position: absolute;
             width: 50px;
             height: 50px;
-            background-image: url('images/kitten.png'); /* Kitten image */
+            background-image: url('images/kitten.png');
             background-size: cover;
         }
         button {
-            padding: 12px 24px; /* Increased button padding */
+            padding: 12px 24px;
             margin: 10px;
-            font-size: 18px; /* Increased button font size */
+            font-size: 18px;
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #00bfff; /* Açık turkuaz rengi */
+            background-color: #00bfff;
             color: white;
-            transition: background 0.3s; /* Button transition effect */
+            transition: background 0.3s;
         }
         button:hover {
-            background-color: #0086b3; /* Daha koyu renk hover için */
+            background-color: #0086b3;
         }
         #scoreboard, #timeLeft {
-            font-size: 18px; /* Score and time text size */
+            font-size: 18px;
             margin: 10px 0;
-            color: #555; /* Text color */
+            color: #555;
         }
     </style>
 </head>
 <body>
     <h1 id="welcomeMessage">
-        <img src="KITTYVERSE-GAME.png" alt="Kittyverse Game" style="width: 600px; height: auto;"> <!-- Büyütülmüş Logo -->
+        <img src="KITTYVERSE-GAME.png" alt="Kittyverse Game" style="width: 600px; height: auto;">
     </h1>
     <div id="gameContainer">
         <div id="gameCanvas"></div>
         <div id="scoreboard">Score: 0</div>
         <div id="timeLeft">Time Left: 60s</div>
         <button id="claimRewardsBtn">Claim Rewards</button>
-        <button id="startGameBtn">Start Game</button> <!-- Start game button -->
+        <button id="startGameBtn">Start Game</button>
     </div>
     <button id="connectWalletBtn">Connect Wallet</button>
-    <!-- Adding music -->
-    <audio id="backgroundMusic" loop>
-        <source src="music/music.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-    <button id="playMusicBtn">Play Music</button> <!-- Play music button -->
-    <button id="pauseMusicBtn">Pause Music</button> <!-- Pause music button -->
 
     <!-- Load Keplr -->
     <script src="https://unpkg.com/@keplr-wallet/window@latest"></script>
 
-    <!-- Existing JavaScript -->
-    <script>
-        let isMusicPlaying = false; // Track the music status
-
-        // Function to play music
-        function playMusic() {
-            const music = document.getElementById('backgroundMusic');
-            music.play().catch((error) => {
-                console.error("Music playback failed: ", error);
-            });
-            isMusicPlaying = true; // Update music status
-        }
-
-        // Function to pause music
-        function pauseMusic() {
-            const music = document.getElementById('backgroundMusic');
-            music.pause();
-            isMusicPlaying = false; // Update music status
-        }
-
-        // Event listeners for music buttons
-        document.getElementById('playMusicBtn').addEventListener('click', playMusic);
-        document.getElementById('pauseMusicBtn').addEventListener('click', pauseMusic);
-    </script>
-
-    <!-- Keplr Integration -->
-    <script>
-        // Function to connect wallet using Keplr
-        async function connectWallet() {
-            if (!window.keplr) {
-                alert("Please install Keplr wallet.");
-                return;
-            }
-
-            try {
-                // Suggest the chain to Keplr
-                await window.keplr.experimentalSuggestChain({
-                    chainId: "dymension_1100-1",
-                    chainName: "Dymension Mainnet",
-                    rpc: "https://dymension-mainnet.public.blastapi.io",
-                    rest: "https://dymension-mainnet-rest.public.blastapi.io",
-                    bip44: {
-                        coinType: 118,
-                    },
-                    bech32Config: {
-                        bech32PrefixAccAddr: "dym",
-                        bech32PrefixAccPub: "dym" + "pub",
-                        bech32PrefixValAddr: "dym" + "valoper",
-                        bech32PrefixValPub: "dym" + "valoperpub",
-                        bech32PrefixConsAddr: "dym" + "valcons",
-                        bech32PrefixConsPub: "dym" + "valconspub",
-                    },
-                    currencies: [
-                        {
-                            coinDenom: "UDYM",
-                            coinMinimalDenom: "udym",
-                            coinDecimals: 6,
-                            coinGeckoId: "dymension",
-                        },
-                    ],
-                    feeCurrencies: [
-                        {
-                            coinDenom: "UDYM",
-                            coinMinimalDenom: "udym",
-                            coinDecimals: 6,
-                            coinGeckoId: "dymension",
-                        },
-                    ],
-                    stakeCurrency: {
-                        coinDenom: "UDYM",
-                        coinMinimalDenom: "udym",
-                        coinDecimals: 6,
-                        coinGeckoId: "dymension",
-                    },
-                    features: ["stargate", "ibc-transfer"],
-                });
-
-                // Enable the chain and get accounts
-                await window.keplr.enable("dymension_1100-1");
-                const accounts = await window.keplr.getAccounts("dymension_1100-1");
-                const userAddress = accounts[0].address;
-
-                document.getElementById('welcomeMessage').innerText = `Connected: ${userAddress}`;
-                document.getElementById('connectWalletBtn').style.display = 'none';
-                document.getElementById('gameContainer').style.display = 'block'; // Show the game after connecting wallet
-            } catch (error) {
-                console.error("Wallet connection failed:", error);
-                alert("Failed to connect wallet. Please check your Keplr settings.");
-            }
-        }
-
-        // Event listener for wallet connection
-        document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
-    </script>
-
     <!-- External Scripts -->
-    <script src="wallet.js"></script>
-    <script src="script.js"></script>
+    <script type="module" src="wallet.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
+    
