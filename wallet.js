@@ -2,7 +2,6 @@
 const adminAddress = "kitty194tqyp4kk7pmrjhnf0dfzz72dqlvtuglh8exxt"; // Admin address
 const chainId = "dymension_1100-1"; // Dymension Mainnet Chain ID
 const rpcEndpoint = "https://dymension-mainnet.public.blastapi.io"; // RPC Endpoint
-const restEndpoint = "https://dymension-mainnet-rest.public.blastapi.io"; // REST Endpoint
 
 // --- Wallet Connection Function ---
 export async function connectWallet() {
@@ -17,7 +16,7 @@ export async function connectWallet() {
             chainId: "dymension_1100-1",
             chainName: "Dymension Mainnet",
             rpc: rpcEndpoint,
-            rest: restEndpoint,
+            rest: "https://dymension-mainnet-rest.public.blastapi.io",
             bip44: {
                 coinType: 118,
             },
@@ -96,7 +95,7 @@ export async function claimReward(userAddress, score) {
             amount: [
                 {
                     denom: "udym", // Dymension native token for fees
-                    amount: "7000000000", // Gas fee in udym (adjust as needed)
+                    amount: "7000000000", // Gas fee in udym
                 },
             ],
             gas: "200000", // Gas limit
@@ -105,7 +104,7 @@ export async function claimReward(userAddress, score) {
             {
                 publicKey: {
                     typeUrl: "/cosmos.crypto.secp256k1.PubKey",
-                    value: new TextEncoder().encode(window.keplr.getKey(chainId).pubkey).toString(), // Use TextEncoder instead of Buffer
+                    value: new TextEncoder().encode(window.keplr.getKey(chainId).pubkey).toString(),
                 },
                 modeInfo: {
                     single: {
@@ -123,7 +122,7 @@ export async function claimReward(userAddress, score) {
         const signedTx = await window.keplr.signAmino(chainId, adminAddress, tx);
 
         // Broadcast the transaction
-        const response = await fetch(`${rpcEndpoint}:443`, { // Ensure port is included
+        const response = await fetch(`${rpcEndpoint}:443`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
