@@ -13,8 +13,9 @@ let gameInterval;
 let kittenInterval;
 
 // --- Blockchain Integration Variables ---
-const contractAddress = "dym1278838f86a613193e9cf2efe8846b705674cbfe2"; //
-const chainId = "dymension_1100-1"; // 
+const adminAddress = "kitty194tqyp4kk7pmrjhnf0dfzz72dqlvtuglh8exxt"; // Admin address
+const chainId = "dymension_1100-1"; //  Dymension Mainnet
+const rpcEndpoint = "https://dymension-mainnet.public.blastapi.io"; // RPC Endpoint
 
 // --- Wallet Connection Function ---
 async function connectWallet() {
@@ -24,9 +25,52 @@ async function connectWallet() {
     }
 
     try {
-        await window.keplr.enable(chainId);
+        // Enable Keplr for the specified chain
+        await window.keplr.experimentalSuggestChain({
+            chainId: "dymension_1100-1",
+            chainName: "Dymension Mainnet",
+            rpc: "https://dymension-mainnet.public.blastapi.io",
+            rest: "https://dymension-mainnet-rest.public.blastapi.io",
+            bip44: {
+                coinType: 118,
+            },
+            bech32Config: {
+                bech32PrefixAccAddr: "dym",
+                bech32PrefixAccPub: "dym" + "pub",
+                bech32PrefixValAddr: "dym" + "valoper",
+                bech32PrefixValPub: "dym" + "valoperpub",
+                bech32PrefixConsAddr: "dym" + "valcons",
+                bech32PrefixConsPub: "dym" + "valconspub",
+            },
+            currencies: [
+                {
+                    coinDenom: "UDYM",
+                    coinMinimalDenom: "udym",
+                    coinDecimals: 6,
+                    coinGeckoId: "dymension",
+                },
+            ],
+            feeCurrencies: [
+                {
+                    coinDenom: "UDYM",
+                    coinMinimalDenom: "udym",
+                    coinDecimals: 6,
+                    coinGeckoId: "dymension",
+                },
+            ],
+            stakeCurrency: {
+                coinDenom: "UDYM",
+                coinMinimalDenom: "udym",
+                coinDecimals: 6,
+                coinGeckoId: "dymension",
+            },
+            features: ["stargate", "ibc-transfer"],
+        });
+
+        // Get accounts
         const accounts = await window.keplr.getAccounts(chainId);
         const userAddress = accounts[0].address;
+
         console.log("Connected address:", userAddress);
         return userAddress;
     } catch (error) {
@@ -46,16 +90,28 @@ async function claimReward(userAddress) {
     const tx = {
         messages: [
             {
-                typeUrl: "/your.module.score.MsgClaimReward",
+                typeUrl: "/cosmos.bank.v1beta1.MsgSend", // Sending tokens via bank module
                 value: {
-                    creator: userAddress,
+                    fromAddress: adminAddress, // Admin address sends the reward
+                    toAddress: userAddress, // Player's address receives the reward
+                    amount: [
+                        {
+                            denom: "kitty", // KITTY token denom
+                            amount: "100", // 100 KITTY tokens
+                        },
+                    ],
                 },
             },
         ],
         memo: "",
         fee: {
-            amount: [],
-            gas: "200000",
+            amount: [
+                {
+                    denom: "udym", // Dymension native token for fees
+                    amount: "7000000000", // Gas fee in udym (adjust as needed)
+                },
+            ],
+            gas: "200000", // Gas limit
         },
         signerInfos: [
             {
@@ -75,9 +131,9 @@ async function claimReward(userAddress) {
     };
 
     try {
-        const signedTx = await window.keplr.signAmino(chainId, userAddress, tx);
+        const signedTx = await window.keplr.signAmino(chainId, adminAddress, tx);
 
-        const response = await fetch("https://dymension-mainnet-tendermint.public.blastapi.io:443", {
+        const response = await fetch(rpcEndpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -94,7 +150,7 @@ async function claimReward(userAddress) {
             alert("Failed to claim reward.");
         } else {
             console.log("Transaction result:", result.result);
-            alert(`Successfully claimed ${(score / 10).toFixed(2)} KITTY Tokens!`);
+            alert(`Successfully claimed 100 KITTY Tokens!`);
         }
     } catch (error) {
         console.error("Failed to sign and broadcast transaction:", error);
