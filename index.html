@@ -3,163 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kitten Game</title>
-    <style>
-        /* General style adjustments */
-        body {
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh; /* Full screen height */
-            background: url('images/background.jpg') no-repeat center center fixed; /* Background image */
-            background-size: cover; /* Background image sizing */
-            color: #333;
-            flex-direction: column; /* Align elements vertically */
-            transition: background 0.5s; /* Background transition effect */
-        }
-
-        h1 {
-            margin-bottom: 20px; /* Space between title and buttons */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Title shadow */
-        }
-
-        #gameContainer {
-            display: none; /* Hidden initially */
-            text-align: center; /* Center game area content */
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Shadow effect */
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
-        }
-
-        #gameCanvas {
-            position: relative;
-            width: 500px;
-            height: 500px;
-            border: 1px solid #000;
-            margin: 20px auto; /* Center */
-            background-color: #ffffff; /* Game area white */
-            overflow: hidden;
-            border-radius: 10px; /* Rounded corners */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
-        }
-
-        .kitten {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background-image: url('images/kitten.png'); /* Kitten image */
-            background-size: cover;
-        }
-
-        button {
-            padding: 12px 24px; /* Increased button padding */
-            margin: 10px;
-            font-size: 18px; /* Increased button font size */
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #00bfff; /* Açık turkuaz rengi */
-            color: white;
-            transition: background 0.3s; /* Button transition effect */
-        }
-
-        button:hover {
-            background-color: #0086b3; /* Daha koyu renk hover için */
-        }
-
-        #scoreboard, #timeLeft {
-            font-size: 18px; /* Score and time text size */
-            margin: 10px 0;
-            color: #555; /* Text color */
-        }
-    </style>
+    <title>KittyVerse</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1 id="welcomeMessage">
-        <img src="KITTYVERSE-GAME.png" alt="Kittyverse Game" style="width: 600px; height: auto;"> <!-- Büyütülmüş Logo -->
-    </h1>
-    <div id="gameContainer">
-        <div id="gameCanvas"></div>
-        <div id="scoreboard">Score: 0</div>
-        <div id="timeLeft">Time Left: 60s</div>
-        <button id="claimRewardsBtn">Claim Rewards</button>
-        <button id="startGameBtn">Start Game</button> <!-- Start game button -->
-    </div>
+    <div id="welcomeMessage">Welcome! Please connect your wallet to start.</div>
     <button id="connectWalletBtn">Connect Wallet</button>
+    <div id="gameContainer" style="display: none;">
+        <button id="startGameBtn">Start Game</button>
+        <canvas id="gameCanvas" style="border: 1px solid black; width: 400px; height: 400px;"></canvas>
+        <div>Score: <span id="scoreboard">0</span></div>
+        <div>Time Left: <span id="timeLeft">60s</span></div>
+        <button id="claimRewardsBtn">Claim Rewards</button>
+    </div>
 
-    <!-- Adding music -->
-    <audio id="backgroundMusic" loop>
-        <source src="music/music.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-
-    <button id="playMusicBtn">Play Music</button> <!-- Play music button -->
-    <button id="pauseMusicBtn">Pause Music</button> <!-- Pause music button -->
-
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-    <script>
-        let isMusicPlaying = false; // Track the music status
-
-        // Function to connect wallet
-        async function connectWallet() {
-            if (window.ethereum) {
-                try {
-                    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-                    document.getElementById('welcomeMessage').innerText = `Connected: ${accounts[0]}`;
-                    document.getElementById('connectWalletBtn').style.display = 'none';
-                    document.getElementById('gameContainer').style.display = 'block'; // Show the game after connecting wallet
-                } catch (error) {
-                    console.error("Wallet connection failed: ", error);
-                }
-            } else {
-                alert("Please install MetaMask!");
-            }
-        }
-
-        // Function to start the game
-        function startGame() {
-            console.log("Game started!");
-            document.getElementById('gameContainer').style.display = 'block'; // Show game area
-            spawnKittens(); // Create kittens
-        }
-
-        // Function to spawn kittens
-        function spawnKittens() {
-            const canvas = document.getElementById('gameCanvas');
-            for (let i = 0; i < 5; i++) {
-                const kitten = document.createElement('div');
-                kitten.className = 'kitten';
-                kitten.style.top = Math.random() * (canvas.offsetHeight - 50) + 'px';
-                kitten.style.left = Math.random() * (canvas.offsetWidth - 50) + 'px';
-                canvas.appendChild(kitten);
-            }
-        }
-
-        // Function to play music
-        function playMusic() {
-            const music = document.getElementById('backgroundMusic');
-            music.play().catch((error) => {
-                console.error("Music playback failed: ", error);
-            });
-            isMusicPlaying = true; // Update music status
-        }
-
-        // Function to pause music
-        function pauseMusic() {
-            const music = document.getElementById('backgroundMusic');
-            music.pause();
-            isMusicPlaying = false; // Update music status
-        }
-
-        // Click event for start game button
-        document.getElementById('connectWalletBtn').addEventListener('click', connectWallet);
-        document.getElementById('startGameBtn').addEventListener('click', startGame); // Event for start game button
-        document.getElementById('playMusicBtn').addEventListener('click', playMusic); // Event for play music button
-        document.getElementById('pauseMusicBtn').addEventListener('click', pauseMusic); // Event for pause music button
-    </script>
-    <script src="wallet.js"></script>
-    <script src="script.js"></script>
+    <!-- Load Keplr -->
+    <script src="https://unpkg.com/@keplr-wallet/window@latest"></script>
+    <script type="module" src="wallet.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
