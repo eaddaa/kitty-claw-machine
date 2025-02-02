@@ -1,6 +1,6 @@
-// --- HTML Elements ---
 import { connectWallet, claimReward } from "./wallet.js";
 
+// --- HTML Elements ---
 const connectWalletBtn = document.getElementById('connectWalletBtn');
 const claimRewardsBtn = document.getElementById('claimRewardsBtn');
 const welcomeMessage = document.getElementById('welcomeMessage');
@@ -21,7 +21,7 @@ connectWalletBtn.addEventListener('click', async () => {
     if (userAddress) {
         welcomeMessage.style.display = 'none';
         gameContainer.style.display = 'block';
-        document.getElementById('startGameBtn').style.display = "block"; // Show button to start the game
+        document.getElementById('startGameBtn').style.display = "block";
     }
 });
 
