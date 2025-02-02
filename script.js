@@ -13,8 +13,8 @@ let gameInterval;
 let kittenInterval;
 
 // --- Blockchain Integration Variables ---
-const contractAddress = "dym1278838f86a613193e9cf2efe8846b705674cbfe2"; // Dymension rollapp adresi
-const chainId = "dym1-testnet"; // Dymension testnet ID'si
+const contractAddress = "dym1278838f86a613193e9cf2efe8846b705674cbfe2"; //
+const chainId = "dymension_1100-1"; // 
 
 // --- Wallet Connection Function ---
 async function connectWallet() {
@@ -77,7 +77,7 @@ async function claimReward(userAddress) {
     try {
         const signedTx = await window.keplr.signAmino(chainId, userAddress, tx);
 
-        const response = await fetch("https://rpc.testnet.dymension.xyz", {
+        const response = await fetch("https://dymension-mainnet-tendermint.public.blastapi.io:443", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
