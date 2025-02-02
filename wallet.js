@@ -1,29 +1,32 @@
 // --- Blockchain Integration Variables ---
-const contractAddress = "dym1278838f86a613193e9cf2efe8846b705674cbfe2"; // Kontrat adresi
-const chainId = "dymension_1100-1"; // Dymension chain ID
+const adminAddress = "kitty194tqyp4kk7pmrjhnf0dfzz72dqlvtuglh8exxt"; // Admin address
+const chainId = "dymension_1100-1"; // Dymension Mainnet Chain ID
+const rpcEndpoint = "https://dymension-mainnet.public.blastapi.io"; // RPC Endpoint
 
 // --- Wallet Connection Function ---
-async function connectWallet() {
+export async function connectWallet() {
     if (!window.keplr) {
         alert("Please install Keplr wallet.");
         return null;
     }
 
     try {
+        // Enable the chain and get accounts
         await window.keplr.enable(chainId);
         const accounts = await window.keplr.getAccounts(chainId);
         const userAddress = accounts[0].address;
+
         console.log("Connected address:", userAddress);
         return userAddress;
     } catch (error) {
         console.error("Failed to connect wallet:", error);
-        alert("Failed to connect wallet.");
+        alert("Failed to connect wallet. Please check your Keplr settings or reload the page.");
         return null;
     }
 }
 
 // --- Claim Reward Function ---
-async function claimReward(userAddress) {
+export async function claimReward(userAddress, score) {
     if (!userAddress || score < 1000) {
         alert("Please connect your wallet and reach 1000 points to claim rewards.");
         return;
@@ -32,17 +35,28 @@ async function claimReward(userAddress) {
     const tx = {
         messages: [
             {
-                typeUrl: "/your.module.score.MsgClaimReward", // Kendi modülüne göre ayarla
+                typeUrl: "/cosmos.bank.v1beta1.MsgSend", // Sending tokens via bank module
                 value: {
-                    creator: userAddress,
-                    amount: "100", // 100 KITTY token
+                    fromAddress: adminAddress, // Admin sends the reward
+                    toAddress: userAddress, // Player receives the reward
+                    amount: [
+                        {
+                            denom: "kitty", // KITTY token denom
+                            amount: "100", // 100 KITTY tokens
+                        },
+                    ],
                 },
             },
         ],
         memo: "",
         fee: {
-            amount: [],
-            gas: "200000",
+            amount: [
+                {
+                    denom: "udym", // Dymension native token for fees
+                    amount: "7000000000", // Gas fee in udym
+                },
+            ],
+            gas: "200000", // Gas limit
         },
         signerInfos: [
             {
@@ -55,16 +69,18 @@ async function claimReward(userAddress) {
                         mode: "SIGN_MODE_DIRECT",
                     },
                 },
-                sequence: 0,
+                sequence: 0, // Sequence should ideally be fetched dynamically
             },
         ],
         timeoutHeight: 0,
     };
 
     try {
-        const signedTx = await window.keplr.signAmino(chainId, userAddress, tx);
+        // Sign the transaction
+        const signedTx = await window.keplr.signAmino(chainId, adminAddress, tx);
 
-        const response = await fetch("https://dymension-mainnet-tendermint.public.blastapi.io:443", {
+        // Broadcast the transaction
+        const response = await fetch(rpcEndpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
