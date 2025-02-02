@@ -1,7 +1,8 @@
 // --- Blockchain Integration Variables ---
 const adminAddress = "kitty194tqyp4kk7pmrjhnf0dfzz72dqlvtuglh8exxt"; // Admin address
-const chainId = "dymension_1100-1"; // Dymension Mainnet Chain ID
-const rpcEndpoint = "https://dymension-mainnet.public.blastapi.io"; // RPC Endpoint
+const chainId = "kittyverse_595973-1"; // Your rollapp's chain ID
+const rpcEndpoint = "https://dymrollapp-rpc.kittyverse.click"; // Your rollapp's RPC endpoint
+const restEndpoint = "https://dymrollapp-rest.kittyverse.click"; // Your rollapp's REST endpoint
 
 // --- Wallet Connection Function ---
 export async function connectWallet() {
@@ -11,6 +12,48 @@ export async function connectWallet() {
     }
 
     try {
+        // Suggest the rollapp-specific chain to Keplr
+        await window.keplr.experimentalSuggestChain({
+            chainId: "kittyverse_595973-1",
+            chainName: "KittyVerse Rollapp",
+            rpc: rpcEndpoint,
+            rest: restEndpoint,
+            bip44: {
+                coinType: 118,
+            },
+            bech32Config: {
+                bech32PrefixAccAddr: "dym", // Adjust prefix if needed
+                bech32PrefixAccPub: "dym" + "pub",
+                bech32PrefixValAddr: "dym" + "valoper",
+                bech32PrefixValPub: "dym" + "valoperpub",
+                bech32PrefixConsAddr: "dym" + "valcons",
+                bech32PrefixConsPub: "dym" + "valconspub",
+            },
+            currencies: [
+                {
+                    coinDenom: "UDYM", // Adjust denom if your rollapp uses a custom token
+                    coinMinimalDenom: "udym",
+                    coinDecimals: 6,
+                    coinGeckoId: "dymension",
+                },
+            ],
+            feeCurrencies: [
+                {
+                    coinDenom: "UDYM", // Adjust denom if your rollapp uses a custom token
+                    coinMinimalDenom: "udym",
+                    coinDecimals: 6,
+                    coinGeckoId: "dymension",
+                },
+            ],
+            stakeCurrency: {
+                coinDenom: "UDYM", // Adjust denom if your rollapp uses a custom token
+                coinMinimalDenom: "udym",
+                coinDecimals: 6,
+                coinGeckoId: "dymension",
+            },
+            features: ["stargate", "ibc-transfer"],
+        });
+
         // Enable the chain and get accounts
         await window.keplr.enable(chainId);
         const accounts = await window.keplr.getAccounts(chainId);
@@ -52,7 +95,7 @@ export async function claimReward(userAddress, score) {
         fee: {
             amount: [
                 {
-                    denom: "udym", // Dymension native token for fees
+                    denom: "udym", // Adjust if your rollapp uses a custom fee token
                     amount: "7000000000", // Gas fee in udym
                 },
             ],
